@@ -20,6 +20,6 @@ func (g *mucpSource) Watch() (source.Watcher, error) {
 
 }
 
-func (m *mucpSource) Client() {
-
+func (m *mucpSource) String() string {
+	return "mucp"
 }
