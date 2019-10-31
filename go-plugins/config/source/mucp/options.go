@@ -3,13 +3,11 @@ package mucp
 import (
 	"context"
 
-	"github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/config/source"
 )
 
 type serviceNameKey struct{}
 type pathKey struct{}
-type clientKey struct{}
 
 func WithServiceName(a string) source.Option {
 	return func(o *source.Options) {
@@ -27,15 +25,5 @@ func WithPath(p string) source.Option {
 			o.Context = context.Background()
 		}
 		o.Context = context.WithValue(o.Context, pathKey{}, p)
-	}
-}
-
-// WithPath sets the key prefix to use
-func WithClient(c client.Client) source.Option {
-	return func(o *source.Options) {
-		if o.Context == nil {
-			o.Context = context.Background()
-		}
-		o.Context = context.WithValue(o.Context, clientKey{}, c)
 	}
 }

@@ -2,14 +2,16 @@ package mucp
 
 import (
 	"context"
+
 	mucp "github.com/micro-in-cn/config-server/go-plugins/config/source/mucp/proto"
 	"github.com/micro/go-micro/client"
+	"github.com/micro/go-micro/config/cmd"
 	"github.com/micro/go-micro/config/source"
 )
 
 var (
 	DefaultPath        = "/micro/config"
-	DefaultServiceName = "go.micro.configService"
+	DefaultServiceName = "go.micro.config"
 )
 
 type mucpSource struct {
@@ -20,7 +22,7 @@ type mucpSource struct {
 }
 
 func (m *mucpSource) Read() (set *source.ChangeSet, err error) {
-	req := m.client.NewRequest(m.serviceName, "", &mucp.ReadRequest{Path: m.path})
+	req := m.client.NewRequest(m.serviceName, "Source.Read", &mucp.ReadRequest{Path: m.path})
 	if err != nil {
 		return nil, err
 	}
@@ -34,8 +36,17 @@ func (m *mucpSource) Read() (set *source.ChangeSet, err error) {
 	return toChangeSet(out.ChangeSet), nil
 }
 
-func (g *mucpSource) Watch() (w source.Watcher, err error) {
-	return nil, nil
+func (m *mucpSource) Watch() (w source.Watcher, err error) {
+	req := (*cmd.DefaultOptions().Client).NewRequest(m.serviceName,
+		"Source.Watch",
+		&mucp.ReadRequest{Path: m.path})
+
+	stream, err := m.client.Stream(context.Background(), req)
+	if err != nil {
+		return nil, err
+	}
+
+	return newWatcher(stream)
 }
 
 func (m *mucpSource) String() string {
@@ -62,9 +73,14 @@ func NewSource(opts ...source.Option) source.Source {
 		}
 	}
 
-	return &mucpSource{
+	s := &mucpSource{
 		serviceName: addr,
 		path:        path,
 		opts:        options,
+		client:      *cmd.DefaultOptions().Client,
 	}
+
+	s.client.Init()
+
+	return s
 }

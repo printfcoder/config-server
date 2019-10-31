@@ -1,10 +1,10 @@
 package mucp
 
 import (
-	"github.com/micro/go-micro/config/source"
 	"time"
 
 	proto "github.com/micro-in-cn/config-server/go-plugins/config/source/mucp/proto"
+	"github.com/micro/go-micro/config/source"
 )
 
 func toChangeSet(c *proto.ChangeSet) *source.ChangeSet {
