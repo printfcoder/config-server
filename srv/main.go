@@ -4,12 +4,12 @@ import (
 	"context"
 	"crypto/md5"
 	"fmt"
-	"github.com/micro/go-micro"
 	"strings"
 	"sync"
 	"time"
 
 	proto "github.com/micro-in-cn/config-server/go-plugins/config/source/mucp/proto"
+	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/config"
 	"github.com/micro/go-micro/config/source/file"
 	"github.com/micro/go-micro/util/log"
@@ -75,7 +75,8 @@ func (s Source) Watch(ctx context.Context, req *proto.WatchRequest, server proto
 func loadConfigFile() (err error) {
 	for _, app := range apps {
 		if err := config.Load(file.NewSource(
-			file.WithPath("D:\\GOPATH\\src\\github.com\\micro-in-cn\\config-server\\srv\\conf\\" + app + ".yml"),
+			// file.WithPath("D:\\GOPATH\\src\\github.com\\micro-in-cn\\config-server\\srv\\conf\\" + app + ".yml"),
+			file.WithPath("/Users/shuxian/Projects/micro-in-cn/config-server/srv/conf/" + app + ".yml"),
 		)); err != nil {
 			log.Fatalf("[loadConfigFile] load files error，%s", err)
 			return err
