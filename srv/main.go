@@ -60,10 +60,6 @@ func (s Source) Read(ctx context.Context, req *proto.ReadRequest, rsp *proto.Rea
 }
 
 func (s Source) Watch(ctx context.Context, req *proto.WatchRequest, server proto.Source_WatchStream) (err error) {
-	defer func() {
-		server.Close()
-	}()
-
 	appName := parsePath(req.Path)
 	rsp := &proto.WatchResponse{
 		ChangeSet: getConfig(appName),
@@ -72,15 +68,14 @@ func (s Source) Watch(ctx context.Context, req *proto.WatchRequest, server proto
 		log.Logf("[Watch] watch files error，%s", err)
 		return err
 	}
-
 	return
 }
 
 func loadConfigFile() (err error) {
 	for _, app := range apps {
 		if err := config.Load(file.NewSource(
-			file.WithPath("D:\\GOPATH\\src\\github.com\\micro-in-cn\\config-server\\srv\\conf\\" + app + ".yml"),
-			// file.WithPath("/Users/shuxian/Projects/micro-in-cn/config-server/srv/conf/" + app + ".yml"),
+			// file.WithPath("D:\\GOPATH\\src\\github.com\\micro-in-cn\\config-server\\srv\\conf\\" + app + ".yml"),
+			file.WithPath("/Users/shuxian/Projects/micro-in-cn/config-server/srv/conf/" + app + ".yml"),
 		)); err != nil {
 			log.Fatalf("[loadConfigFile] load files error，%s", err)
 			return err
