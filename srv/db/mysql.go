@@ -25,5 +25,5 @@ func initMysql() {
 		log.Fatal(err)
 	}
 
-	log.Infof("[initMysql] init db: mysql has been inited done")
+	log.Infof("[initMysql] init db: mysql has inited done")
 }

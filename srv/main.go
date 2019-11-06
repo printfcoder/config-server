@@ -3,6 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/micro-in-cn/config-server/srv/broker"
+	"sync"
+
+	_ "github.com/go-sql-driver/mysql"
 	proto "github.com/micro-in-cn/config-server/go-plugins/config/source/mucp/proto"
 	"github.com/micro-in-cn/config-server/srv/config"
 	"github.com/micro-in-cn/config-server/srv/db"
@@ -10,7 +14,6 @@ import (
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/util/log"
-	"sync"
 )
 
 var (
@@ -21,17 +24,17 @@ var (
 type Source struct{}
 
 func main() {
-	// 新建服务
 	service := micro.NewService(
 		micro.Name("go.micro.config"),
+		micro.WrapCall(),
 	)
 
-	// 注册服务
 	proto.RegisterSourceHandler(service.Server(), new(Source))
 
 	service.Init(micro.Action(func(ctx *cli.Context) {
 		config.Init()
 		db.Init()
+		broker.Init()
 	}))
 
 	if err := service.Run(); err != nil {

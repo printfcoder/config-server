@@ -15,13 +15,11 @@ var (
 	inited bool
 	sp     = string(filepath.Separator)
 
-	configMe = &struct {
-		ConfigServer allConfig `json:"config_server"`
-	}{}
+	configMe = &allConfig{}
 )
 
 type allConfig struct {
-	db *dbConfig `json:"db"`
+	DB *dbConfig `json:"db"`
 }
 
 // Init 初始化配置
@@ -45,11 +43,9 @@ func Init() {
 		panic(err)
 	}
 
-	if err := config.Scan(configMe); err != nil {
+	if err := config.Get("micro", "config_server").Scan(configMe); err != nil {
 		panic(err)
 	}
-
-	log.Info(configMe)
 
 	inited = true
 
@@ -57,5 +53,5 @@ func Init() {
 }
 
 func GetDBConfig() (ret DBConfig) {
-	return configMe.ConfigServer.db
+	return configMe.DB
 }
