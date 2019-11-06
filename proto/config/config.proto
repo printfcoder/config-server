@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+service Config {
+    rpc CreateApp (ConfigRequest) returns (ConfigResponse) {
+    };
+    rpc ListApps (ConfigRequest) returns (ConfigResponse) {
+    };
+    rpc GetApp (ConfigRequest) returns (ConfigResponse) {
+    };
+    rpc CreateCluster (ConfigRequest) returns (ConfigResponse) {
+    };
+    rpc CreateEnv (ConfigRequest) returns (ConfigResponse) {
+    };
+}
+
+message App {
+    int64 id = 1;
+    string appId = 2;
+    string appName = 3;
+    int64 createdTime = 4;
+    int64 updatedTime = 5;
+}
+
+message Cluster {
+    int64 id = 1;
+    string name = 2;
+    string appId = 3;
+    int64 createdTime = 4;
+    int64 updatedTime = 5;
+}
+
+message Env {
+    int64 id = 1;
+    string name = 2;
+    string appId = 3;
+    int64 createdTime = 4;
+    int64 updatedTime = 5;
+}
+
+message ConfigRequest {
+    App app = 1;
+}
+
+message Error {
+    int32 code = 1;
+    string msg = 2;
+}
+
+message ConfigResponse {
+    Error error = 2;
+    App app = 3;
+    repeated App appList = 4;
+    Cluster cluster = 5;
+    repeated Cluster clusterList = 6;
+    Env env = 7;
+    repeated Env envList = 8;
+}

@@ -14,9 +14,14 @@ Config-Server 基于go-micro/config编写，可以无缝集成到任何Go-Micro�
 
 ![](https://github.com/micro-in-cn/docs/blob/master/architecture-design/config-server/design.png)
 
-## 配置结构
+- [config-srv](./config-srv) 配置服务 
+- [admin-srv](./admin-srv) 管理层服务
 
--- 
+## 接口设计
+
+### 配置服务
+
+### 管理层服务
 
 ## SRV
 
