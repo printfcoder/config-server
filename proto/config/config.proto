@@ -9,7 +9,25 @@ service Config {
     };
     rpc CreateCluster (ConfigRequest) returns (ConfigResponse) {
     };
+    rpc GetCluster (ConfigRequest) returns (ConfigResponse) {
+    };
+    rpc ListClusters (ConfigRequest) returns (ConfigResponse) {
+    };
     rpc CreateEnv (ConfigRequest) returns (ConfigResponse) {
+    };
+    rpc GetEnv (ConfigRequest) returns (ConfigResponse) {
+    };
+    rpc ListEnvs (ConfigRequest) returns (ConfigResponse) {
+    };
+    rpc CreateInstance (ConfigRequest) returns (ConfigResponse) {
+    };
+    rpc CreateNamespace (ConfigRequest) returns (ConfigResponse) {
+    };
+    rpc CreateItem (ConfigRequest) returns (ConfigResponse) {
+    };
+    rpc UpdateItem (ConfigRequest) returns (ConfigResponse) {
+    };
+    rpc DeleteItems (ConfigRequest) returns (ConfigResponse) {
     };
 }
 
@@ -35,6 +53,35 @@ message Env {
     string appId = 3;
     int64 createdTime = 4;
     int64 updatedTime = 5;
+}
+
+message Instance {
+    int64 id = 1;
+    string appId = 2;
+    string clusterName = 3;
+    string ip = 4;
+    int64 createdTime = 5;
+    int64 updatedTime = 6;
+}
+
+message Item {
+    int64 id = 1;
+    int64 namespaceId = 2;
+    string key = 3;
+    string value = 4;
+    string comment = 5;
+    int32 lineNo = 6;
+    int64 createdTime = 7;
+    int64 updatedTime = 8;
+}
+
+message Namespace {
+    int64 id = 1;
+    string appId = 2;
+    string name = 3;
+    string clusterName = 4;
+    int64 createdTime = 5;
+    int64 updatedTime = 6;
 }
 
 message ConfigRequest {
