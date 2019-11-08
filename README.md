@@ -17,13 +17,26 @@ Config-Server 基于go-micro/config编写，可以无缝集成到任何Go-Micro�
 - [config-srv](./config-srv) 配置服务 
 - [admin-srv](./admin-srv) 管理层服务
 
+![](https://github.com/micro-in-cn/docs/blob/master/architecture-design/config-server/business-desgin.png)
+
+- App 应用
+  - Env 环境（开发、测试、压测、集成、产线）
+    - Cluster 集群 （A区，B区，C区）
+      - Namespace 空间 （配置所属域）
+        - Item 配置项
+          - Key 配置名
+          - Value 配置值
+    
+
 ## 接口设计
 
 ### 配置服务
 
 ### 管理层服务
 
-## SRV
+## CONFIG-SRV
 
-## ADMIN
+## ADMIN-SRV
+
+
 
