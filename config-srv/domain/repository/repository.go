@@ -1,11 +1,11 @@
-package db
+package repository
 
 import (
 	"database/sql"
 	"fmt"
 	"sync"
 
-	"github.com/micro-in-cn/config-server/srv/config"
+	"github.com/micro-in-cn/config-server/config-srv/config"
 	"github.com/micro/go-micro/util/log"
 )
 
@@ -30,7 +30,7 @@ func Init() {
 		return
 	}
 
-	if config.GetDBConfig().GetDialect() == "mysql" {
+	if bootstrap.GetDBConfig().GetDialect() == "mysql" {
 		initMysql()
 	}
 

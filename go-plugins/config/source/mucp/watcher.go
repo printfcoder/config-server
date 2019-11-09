@@ -9,7 +9,7 @@ type watcher struct {
 	stream proto.Source_WatchService
 }
 
-func newWatcher(stream proto.Source_WatchService) (*watcher, error) {
+func newWatcher(stream proto.Source_WatchService) (source.Watcher, error) {
 	return &watcher{stream: stream}, nil
 }
 

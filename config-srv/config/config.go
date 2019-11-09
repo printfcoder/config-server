@@ -36,7 +36,7 @@ func Init() {
 
 	appPath, _ := filepath.Abs(filepath.Dir(filepath.Join("."+sp, sp)))
 
-	pt := filepath.Join(appPath, "conf")
+	pt := filepath.Join(appPath, "resources")
 	os.Chdir(appPath)
 
 	if err := config.Load(file.NewSource(file.WithPath(pt + sp + "application.yml"))); err != nil {

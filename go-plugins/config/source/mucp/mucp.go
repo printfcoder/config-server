@@ -40,7 +40,7 @@ func (m *mucpSource) Watch() (w source.Watcher, err error) {
 }
 
 func (m *mucpSource) String() string {
-	return "proto"
+	return "mucp"
 }
 
 func NewSource(opts ...source.Option) source.Source {
@@ -67,7 +67,7 @@ func NewSource(opts ...source.Option) source.Source {
 		serviceName: addr,
 		path:        path,
 		opts:        options,
-		client:      proto.NewSourceService("go.micro.config", *cmd.DefaultOptions().Client),
+		client:      proto.NewSourceService(addr, *cmd.DefaultOptions().Client),
 	}
 
 	return s
