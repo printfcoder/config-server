@@ -36,6 +36,24 @@ Config-Server 基于go-micro/config编写，可以无缝集成到任何Go-Micro�
 
 ## 接口设计
 
+### 格式协议
+
+结构：
+ 
+```text
+VERSION1:#{APP}/#{ENV}/#{CLUSTER}/#{Namespace1},#{Namespace2},#{Namespace3}
+```
+
+释意：
+
+```text
+- VERSION1 版本号，固定，目前仅支持“VERSION1”，在接口统一的情况下，用于解析不同版本的请求文本
+  - APP 应用名，一次请求只能填一个
+    - Env 应用部署环境，一次请求只能填一个
+      - Cluster 应用部署的集群，一次请求只能填一个，Config-Server支持向同一服务不同集群提供服务
+        - Namespace 配置所属域（空间），可以传任意多个，返回这些空间下的所有配置
+```
+
 ### 配置服务
 
 ### 管理层服务
@@ -43,3 +61,9 @@ Config-Server 基于go-micro/config编写，可以无缝集成到任何Go-Micro�
 ## CONFIG-SRV
 
 ## ADMIN-SRV
+
+## FAQ
+
+1. 如何解决客户端来自不同集群的注册问题？
+
+答：不同集群使用注册中心可能不一样，导致客户端无法通过Go-Micro原生Selector查询到Config-Server。Config-Server的Source支持使用IP列表直连配置服务获取配置。

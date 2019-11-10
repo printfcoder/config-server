@@ -19,7 +19,7 @@ service Config {
     };
     rpc ListEnvs (ConfigRequest) returns (ConfigResponse) {
     };
-    rpc CreateInstance (ConfigRequest) returns (ConfigResponse) {
+    rpc PullInstances (ConfigRequest) returns (ConfigResponse) {
     };
     rpc CreateNamespace (ConfigRequest) returns (ConfigResponse) {
     };

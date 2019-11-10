@@ -45,7 +45,7 @@ func (c entry) ListEnvs(context.Context, *config.ConfigRequest, *config.ConfigRe
 	panic("implement me")
 }
 
-func (c entry) CreateInstance(context.Context, *config.ConfigRequest, *config.ConfigResponse) error {
+func (c entry) PullInstances(context.Context, *config.ConfigRequest, *config.ConfigResponse) error {
 	panic("implement me")
 }
 
