@@ -47,7 +47,7 @@ func NewSource(opts ...source.Option) source.Source {
 
 		env, ok = options.Context.Value(envName{}).(string)
 		if !ok {
-			panic("env is necessary for loading configurations! eg. It should be DEV or FAT or UAT...")
+			panic("env is necessary for loading configurations! eg. It probably should be DEV or FAT or UAT...")
 		}
 
 		ns, ok = options.Context.Value(namespaces{}).([]string)

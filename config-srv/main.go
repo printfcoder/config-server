@@ -5,8 +5,8 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/micro-in-cn/config-server/config-srv/config"
+	"github.com/micro-in-cn/config-server/config-srv/domain/repository"
 	"github.com/micro-in-cn/config-server/config-srv/facade"
-	"github.com/micro-in-cn/config-server/config-srv/repository"
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
 )

@@ -10,6 +10,10 @@ Config-Server 基于go-micro/config编写，可以无缝集成到任何Go-Micro�
 2. 提供关系性数据库存储能力
 3. 支持界面管理
 
+## 借鉴Apollo
+
+Config-Server参考了Apollo在业界成熟的设计方案，详见下方的服务架构与业务架构。感谢Apollo这款优秀的产品，我们在她的设计之上简化了表设计、发布流程，更重要的是面向Go-Micro风格的服务。
+
 ## 架构设计
 
 ### 服务架构
