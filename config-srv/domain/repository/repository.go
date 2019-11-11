@@ -30,7 +30,7 @@ func Init() {
 		return
 	}
 
-	if bootstrap.GetDBConfig().GetDialect() == "mysql" {
+	if config.GetDBConfig().GetDialect() == "mysql" {
 		initMysql()
 	}
 

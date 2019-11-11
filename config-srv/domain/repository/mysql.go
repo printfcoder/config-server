@@ -12,14 +12,14 @@ func initMysql() {
 
 	var err error
 
-	mysqlDB, err = sql.Open("mysql", bootstrap.GetDBConfig().GetMysql().GetURL())
+	mysqlDB, err = sql.Open("mysql", config.GetDBConfig().GetMysql().GetURL())
 	if err != nil {
 		log.Fatal(err)
 		panic(err)
 	}
 
-	mysqlDB.SetMaxOpenConns(bootstrap.GetDBConfig().GetMysql().GetMaxOpenConnection())
-	mysqlDB.SetMaxIdleConns(bootstrap.GetDBConfig().GetMysql().GetMaxIdleConnection())
+	mysqlDB.SetMaxOpenConns(config.GetDBConfig().GetMysql().GetMaxOpenConnection())
+	mysqlDB.SetMaxIdleConns(config.GetDBConfig().GetMysql().GetMaxIdleConnection())
 
 	if err = mysqlDB.Ping(); err != nil {
 		log.Fatal(err)

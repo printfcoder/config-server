@@ -1,11 +1,13 @@
 package facade
 
 import (
-	proto "github.com/micro-in-cn/config-server/go-plugins/config/source/mucp/proto"
+	protoS "github.com/micro-in-cn/config-server/go-plugins/config/source/mucp/proto"
+	protoE "github.com/micro-in-cn/config-server/proto/entry"
 	"github.com/micro/go-micro/server"
 )
 
 func RegisterHandlers(server server.Server) error {
-	_ = proto.RegisterSourceHandler(server, new(source))
+	_ = protoS.RegisterSourceHandler(server, new(source))
+	_ = protoE.RegisterEntryHandler(server, new(entry))
 	return nil
 }

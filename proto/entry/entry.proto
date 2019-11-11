@@ -1,33 +1,33 @@
 syntax = "proto3";
 
-service Config {
-    rpc CreateApp (ConfigRequest) returns (ConfigResponse) {
+service Entry {
+    rpc CreateApp (EntryRequest) returns (EntryResponse) {
     };
-    rpc ListApps (ConfigRequest) returns (ConfigResponse) {
+    rpc ListApps (EntryRequest) returns (EntryResponse) {
     };
-    rpc GetApp (ConfigRequest) returns (ConfigResponse) {
+    rpc GetApp (EntryRequest) returns (EntryResponse) {
     };
-    rpc CreateCluster (ConfigRequest) returns (ConfigResponse) {
+    rpc CreateCluster (EntryRequest) returns (EntryResponse) {
     };
-    rpc GetCluster (ConfigRequest) returns (ConfigResponse) {
+    rpc GetCluster (EntryRequest) returns (EntryResponse) {
     };
-    rpc ListClusters (ConfigRequest) returns (ConfigResponse) {
+    rpc ListClusters (EntryRequest) returns (EntryResponse) {
     };
-    rpc CreateEnv (ConfigRequest) returns (ConfigResponse) {
+    rpc CreateEnv (EntryRequest) returns (EntryResponse) {
     };
-    rpc GetEnv (ConfigRequest) returns (ConfigResponse) {
+    rpc GetEnv (EntryRequest) returns (EntryResponse) {
     };
-    rpc ListEnvs (ConfigRequest) returns (ConfigResponse) {
+    rpc ListEnvs (EntryRequest) returns (EntryResponse) {
     };
-    rpc PullInstances (ConfigRequest) returns (ConfigResponse) {
+    rpc PullInstances (EntryRequest) returns (EntryResponse) {
     };
-    rpc CreateNamespace (ConfigRequest) returns (ConfigResponse) {
+    rpc CreateNamespace (EntryRequest) returns (EntryResponse) {
     };
-    rpc CreateItem (ConfigRequest) returns (ConfigResponse) {
+    rpc CreateItem (EntryRequest) returns (EntryResponse) {
     };
-    rpc UpdateItem (ConfigRequest) returns (ConfigResponse) {
+    rpc UpdateItem (EntryRequest) returns (EntryResponse) {
     };
-    rpc DeleteItems (ConfigRequest) returns (ConfigResponse) {
+    rpc DeleteItems (EntryRequest) returns (EntryResponse) {
     };
 }
 
@@ -84,7 +84,7 @@ message Namespace {
     int64 updatedTime = 6;
 }
 
-message ConfigRequest {
+message EntryRequest {
     App app = 1;
 }
 
@@ -93,7 +93,7 @@ message Error {
     string msg = 2;
 }
 
-message ConfigResponse {
+message EntryResponse {
     Error error = 2;
     App app = 3;
     repeated App appList = 4;
