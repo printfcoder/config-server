@@ -23,7 +23,7 @@ func (m *mysqlSource) Read() (*source.ChangeSet, error) {
 }
 
 func (m *mysqlSource) Watch() (source.Watcher, error) {
-	// confirm there are data
+	// confirm and prepare data is here
 	cs, err := m.Read()
 	if err != nil {
 		return nil, err
