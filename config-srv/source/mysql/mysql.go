@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"github.com/micro-in-cn/config-server/config-srv/domain/service"
+	cwc "github.com/micro-in-cn/config-server/config-srv/domain/watcher"
 	"github.com/micro/go-micro/config/source"
 )
 
@@ -14,6 +15,7 @@ type mysqlSource struct {
 	namespace         []string
 	opts              source.Options
 	client            service.Service
+	wc                cwc.Watcher
 }
 
 func (m *mysqlSource) Read() (*source.ChangeSet, error) {
@@ -21,7 +23,13 @@ func (m *mysqlSource) Read() (*source.ChangeSet, error) {
 }
 
 func (m *mysqlSource) Watch() (source.Watcher, error) {
-	panic("implement me")
+	// confirm there are data
+	cs, err := m.Read()
+	if err != nil {
+		return nil, err
+	}
+
+	return newWatcher(m.wc, cs, m.app, m.env, m.cluster, m.namespace...)
 }
 
 func (m *mysqlSource) String() string {
@@ -42,12 +50,12 @@ func NewSource(opts ...source.Option) source.Source {
 	if options.Context != nil {
 		app, ok = options.Context.Value(appName{}).(string)
 		if !ok {
-			panic("app name is necessary for loading configurations! plz check on the Platform-Web which name it is.")
+			panic("App name is necessary for loading configurations! plz check on the Platform-Web which name it is.")
 		}
 
 		env, ok = options.Context.Value(envName{}).(string)
 		if !ok {
-			panic("env is necessary for loading configurations! eg. It probably should be DEV or FAT or UAT...")
+			panic("Env is necessary for loading configurations! eg. It probably should be DEV or FAT or UAT...")
 		}
 
 		ns, ok = options.Context.Value(namespaces{}).([]string)
@@ -64,7 +72,8 @@ func NewSource(opts ...source.Option) source.Source {
 		cluster:   cluster,
 		namespace: ns,
 		opts:      options,
-		client:    service.Service{},
+		client:    service.GetService(),
+		wc:        cwc.GetWatcher(),
 	}
 
 	return s

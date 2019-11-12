@@ -1,16 +1,32 @@
 package mysql
 
 import (
+	"sync"
+
+	cwc "github.com/micro-in-cn/config-server/config-srv/domain/watcher"
 	"github.com/micro/go-micro/config/source"
 )
 
 type watcher struct {
+	sync.RWMutex
 	ch   chan *source.ChangeSet
+	cs   *source.ChangeSet
+	wc   cwc.Watcher
 	exit chan bool
 }
 
-func newWatcher(cw client.Watcher) (source.Watcher, error) {
-	return &watcher{cw: cw}, nil
+func newWatcher(wc cwc.Watcher, cs *source.ChangeSet, app, env, cluster string, namespaces ...string) (source.Watcher, error) {
+	w := &watcher{
+		cs:   cs,
+		ch:   make(chan *source.ChangeSet),
+		exit: make(chan bool),
+	}
+
+	ch := wc.Watch(app, env, cluster, namespaces...)
+
+	go w.run(wc, ch)
+
+	return w, nil
 }
 
 func (w *watcher) Next() (*source.ChangeSet, error) {
@@ -30,4 +46,26 @@ func (w *watcher) Stop() error {
 		close(w.exit)
 	}
 	return nil
+}
+
+func (w *watcher) handle(cs *source.ChangeSet) {
+	cs.Checksum = cs.Sum()
+
+	w.Lock()
+	w.cs = cs
+	w.Unlock()
+
+	w.ch <- cs
+}
+
+func (w *watcher) run(wc cwc.Watcher, ch chan *source.ChangeSet) {
+	for {
+		select {
+		case rsp := <-ch:
+			w.handle(rsp)
+		case <-w.exit:
+			w.Stop()
+			return
+		}
+	}
 }

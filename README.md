@@ -21,10 +21,9 @@ Config-Server参考了Apollo在业界成熟的设计方案，详见下方的服�
 ![](https://github.com/micro-in-cn/docs/blob/master/architecture-design/config-server/design.png)
 
 - Clients 任意服务或客户端，调用[config-srv](./config-srv)获取配置
-- Platform-Web
-- [config-srv](./config-srv) 配置服务 
+- [platform-web](https://github.com/micro-in-cn/platform-web) UI接入层，集成配置管理界面，与[admin-srv](./admin-srv)交互
+- [config-srv](./config-srv) 配置服务，向微服务提供接口下发配置，不提供改动接口，只向[admin-srv](./admin-srv)提供CRUD接口用于管理配置数据。
 - [admin-srv](./admin-srv) 管理层服务
-- [platform-web](https://github.com/micro-in-cn/platform-web) UI接入层
 
 ### 业务架构
 
