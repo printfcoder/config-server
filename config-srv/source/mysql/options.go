@@ -8,7 +8,7 @@ import (
 type appName struct{}
 type envName struct{}
 type clusterName struct{}
-type namespaces struct{}
+type namespace struct{}
 
 func WithApp(app string) source.Option {
 	return func(o *source.Options) {
@@ -37,11 +37,11 @@ func WithClusterName(cluster string) source.Option {
 	}
 }
 
-func WithNamespaces(ns ...string) source.Option {
+func WithNamespace(ns ...string) source.Option {
 	return func(o *source.Options) {
 		if o.Context == nil {
 			o.Context = context.Background()
 		}
-		o.Context = context.WithValue(o.Context, namespaces{}, ns)
+		o.Context = context.WithValue(o.Context, namespace{}, ns)
 	}
 }

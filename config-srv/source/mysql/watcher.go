@@ -15,14 +15,14 @@ type watcher struct {
 	exit chan bool
 }
 
-func newWatcher(wc cwc.Watcher, cs *source.ChangeSet, app, env, cluster string, namespaces ...string) (source.Watcher, error) {
+func newWatcher(wc cwc.Watcher, cs *source.ChangeSet, app, env, cluster string, namespace string) (source.Watcher, error) {
 	w := &watcher{
 		cs:   cs,
 		ch:   make(chan *source.ChangeSet),
 		exit: make(chan bool),
 	}
 
-	ch := wc.Watch(app, env, cluster, namespaces...)
+	ch := wc.Watch(app, env, cluster, namespace)
 
 	go w.run(wc, ch)
 

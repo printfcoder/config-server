@@ -12,14 +12,14 @@ var (
 
 type mysqlSource struct {
 	app, env, cluster string
-	namespace         []string
+	namespace         string
 	opts              source.Options
 	client            service.Service
 	wc                cwc.Watcher
 }
 
 func (m *mysqlSource) Read() (*source.ChangeSet, error) {
-	return m.client.QueryChangeSet(m.app, m.env, m.cluster, m.namespace...)
+	return m.client.QueryChangeSet(m.app, m.env, m.cluster, m.namespace)
 }
 
 func (m *mysqlSource) Watch() (source.Watcher, error) {
@@ -29,7 +29,7 @@ func (m *mysqlSource) Watch() (source.Watcher, error) {
 		return nil, err
 	}
 
-	return newWatcher(m.wc, cs, m.app, m.env, m.cluster, m.namespace...)
+	return newWatcher(m.wc, cs, m.app, m.env, m.cluster, m.namespace)
 }
 
 func (m *mysqlSource) String() string {
@@ -43,8 +43,7 @@ func NewSource(opts ...source.Option) source.Source {
 	}
 
 	cluster := DefaultCluster
-	app, env := "", ""
-	var ns []string
+	app, env, ns := "", "", ""
 	ok := false
 
 	if options.Context != nil {
@@ -58,7 +57,7 @@ func NewSource(opts ...source.Option) source.Source {
 			panic("Env is necessary for loading configurations! eg. It probably should be DEV or FAT or UAT...")
 		}
 
-		ns, ok = options.Context.Value(namespaces{}).([]string)
+		ns, ok = options.Context.Value(namespace{}).(string)
 		if !ok {
 			panic("Namespace is necessary for loading configurations! it decides which domain configs you need.")
 		}

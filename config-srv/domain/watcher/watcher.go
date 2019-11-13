@@ -1,9 +1,8 @@
 package watcher
 
 import (
+	"crypto/md5"
 	"fmt"
-	"sort"
-	"strings"
 	"sync"
 
 	"github.com/micro/go-micro/config/source"
@@ -12,8 +11,8 @@ import (
 var (
 	w     = &watcher{}
 	mu    sync.Mutex
-	chMap = make(map[string][]*source.ChangeSet)
-	nsMap = make(map[string][]*source.ChangeSet)
+	chMap = make(map[string][]chan *source.ChangeSet)
+	nsMap = make(map[string][]chan *source.ChangeSet)
 )
 
 func Init() {
@@ -21,41 +20,32 @@ func Init() {
 }
 
 type Watcher interface {
-	Watch(app, env, cluster string, namespaces ...string) (ch chan *source.ChangeSet)
+	Watch(app, env, cluster string, namespaces string) (ch chan *source.ChangeSet)
 }
 
 type watcher struct {
 }
 
-func (w *watcher) Watch(app, env, cluster string, namespaces ...string) (ch chan *source.ChangeSet) {
-	// for locating which chans should be pushed event into
-	key := getChKey(app, env, cluster, namespaces...)
-	// for listening the changes of configs in every namespace
-	nsKeys := getNSKeys(app, cluster, namespaces...)
+func (w *watcher) Run() {
+
+}
+
+func (w *watcher) Watch(app, env, cluster string, namespace string) (ch chan *source.ChangeSet) {
+	// for locating which chan should be pushed event into
+	key := getChKey(app, env, cluster, namespace)
 
 	mu.Lock()
-	if sets, ok := chMap[key]; !ok {
-		chMap[key] = []chan *source.ChangeSet{make(chan *source.ChangeSet)}
-	}
+	ch = make(chan *source.ChangeSet)
+	chMap[key] = append(chMap[key], ch)
 	mu.Unlock()
 
-	return nil
+	return
 }
 
 func GetWatcher() Watcher {
 	return w
 }
 
-func getChKey(app, env, cluster string, namespaces ...string) string {
-	sort.Strings(namespaces)
-	return fmt.Sprintf("%s%s%s%s", app, env, cluster, strings.Join(namespaces, ""))
-}
-
-func getNSKeys(app, cluster string, namespaces ...string) []string {
-	ret := make([]string, 0, len(namespaces))
-	for _, v := range namespaces {
-		ret = append(ret, fmt.Sprintf("%s%s%s", app, cluster, v))
-	}
-
-	return ret
+func getChKey(app, env, cluster, namespace string) string {
+	return string(md5.New().Sum([]byte(fmt.Sprintf("%s%s%s%s", app, env, cluster, namespace))))
 }
