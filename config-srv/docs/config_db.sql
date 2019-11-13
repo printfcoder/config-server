@@ -58,8 +58,6 @@ create table item
 	namespace_id int unsigned not null,
 	`key` varchar(128) not null,
 	value text null,
-	comment text null,
-	line_no int unsigned null,
 	deleted tinyint(1) not null,
 	created_time timestamp(3) default CURRENT_TIMESTAMP(3) not null,
 	updated_time timestamp(3) default CURRENT_TIMESTAMP(3) not null on update CURRENT_TIMESTAMP(3)

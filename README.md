@@ -41,13 +41,13 @@ Config-Server参考了Apollo在业界成熟的设计方案，详见下方的服�
 
 ### 格式协议
 
-结构：
+1. 结构：
  
 ```text
 VERSION1:#{APP}/#{ENV}/#{CLUSTER}/#{Namespace1},#{Namespace2},#{Namespace3}
 ```
 
-释意：
+2. 释意：
 
 ```text
 - VERSION1 版本号，固定，目前仅支持“VERSION1”，在接口统一的情况下，用于解析不同版本的请求文本
@@ -56,6 +56,42 @@ VERSION1:#{APP}/#{ENV}/#{CLUSTER}/#{Namespace1},#{Namespace2},#{Namespace3}
       - Cluster 应用部署的集群，一次请求只能填一个，Config-Server支持向同一服务不同集群提供服务
         - Namespace 配置所属域（空间），可以传任意多个，返回这些空间下的所有配置
 ```
+
+3. 存储
+
+表结构大致如下
+
+id | namespace_id | key | value 
+--- | --- | --- | --- 
+1 | 2 | micro.book.name | BOOK-NAME 
+2 | 2 | micro.book.price | 123 
+
+有几个需要注意的地方：
+
+**-- 强定义的结构**
+
+为了方便当key-value转成其它格式如JSON、Properties、YAML等标准，不允许以下不规范的冲突出现：
+
+id | namespace_id | key | value 
+--- | --- | --- | --- 
+1 | 2 | micro.book.name | BOOK-NAME 
+2 | 2 | micro.book.price | 123 
+2 | 2 | **micro.book** | 一本好书
+
+**micro.book**有子key（name、price），它不能再被当成一个key，比如我们需要转换成JSON：
+
+```json
+{
+  "micro": {
+    "book": {
+      "name": "BOOK-NAME",
+      "price": "123"
+    }
+  }
+}
+```
+
+格式非法时，无法转换。
 
 ### 配置服务
 
