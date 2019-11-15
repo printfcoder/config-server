@@ -5,7 +5,7 @@ import (
 )
 
 type Client struct {
-	Service
+	//Service
 }
 
 func (c *Client) Query(path string) (set *source.ChangeSet, err error) {

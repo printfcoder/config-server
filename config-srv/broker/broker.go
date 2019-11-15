@@ -7,8 +7,8 @@ var (
 	bk                       broker.Broker
 )
 
-func Init(bk broker.Broker) {
-	bk = bk
+func Init(broker broker.Broker) {
+	bk = broker
 }
 
 func subscribe() {
