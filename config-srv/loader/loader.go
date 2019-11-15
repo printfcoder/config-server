@@ -11,6 +11,7 @@ import (
 	"github.com/micro/go-micro/util/log"
 )
 
+//nolint
 func loadConfigFile() (err error) {
 	// watch changes
 	watcher, err := config.Watch()

@@ -5,13 +5,14 @@ import (
 
 	cwc "github.com/micro-in-cn/config-server/config-srv/domain/watcher"
 	"github.com/micro/go-micro/config/source"
+	"github.com/micro/go-micro/util/log"
 )
 
 type watcher struct {
 	sync.RWMutex
 	ch   chan *source.ChangeSet
 	cs   *source.ChangeSet
-	wc   cwc.Watcher
+	wc   cwc.Watcher //nolint
 	exit chan bool
 }
 
@@ -64,7 +65,9 @@ func (w *watcher) run(wc cwc.Watcher, ch chan *source.ChangeSet) {
 		case rsp := <-ch:
 			w.handle(rsp)
 		case <-w.exit:
-			w.Stop()
+			if err := w.Stop(); err != nil {
+				log.Errorf("[Watcher] stop error: %s", err)
+			}
 			return
 		}
 	}

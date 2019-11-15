@@ -12,7 +12,7 @@ var (
 	w     = &watcher{}
 	mu    sync.Mutex
 	chMap = make(map[string][]chan *source.ChangeSet)
-	nsMap = make(map[string][]chan *source.ChangeSet)
+	nsMap = make(map[string][]chan *source.ChangeSet) //nolint
 )
 
 func Init() {
