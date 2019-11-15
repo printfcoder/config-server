@@ -12,7 +12,7 @@ type watcher struct {
 	sync.RWMutex
 	ch   chan *source.ChangeSet
 	cs   *source.ChangeSet
-	wc   cwc.Watcher
+	wc   cwc.Watcher //nolint
 	exit chan bool
 }
 
