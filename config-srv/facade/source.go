@@ -22,8 +22,6 @@ func (s source) Read(ctx context.Context, req *proto.ReadRequest, rsp *proto.Rea
 		err = fmt.Errorf("[Read] the first path is invalid")
 		return
 	}
-
-	return
 }
 
 func (s source) Watch(ctx context.Context, req *proto.WatchRequest, server proto.Source_WatchStream) (err error) {

@@ -2,7 +2,7 @@ package facade
 
 import (
 	"context"
-	"fmt"
+	"errors"
 
 	"github.com/micro-in-cn/config-server/config-srv/domain/service"
 	proto "github.com/micro-in-cn/config-server/proto/entry"
@@ -15,19 +15,18 @@ var (
 	appService = &service.App{}
 )
 
-func (e entry) CreateApp(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) (err error) {
+func (e entry) CreateApp(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) error {
 	app := req.GetApp()
 	if app != nil {
 		id, err := appService.CreateApp(app.GetAppId(), app.GetAppName())
 		if err != nil {
-			err = fmt.Errorf("[CreateApp] create app error: %s", err)
-			return
+			return err
 		}
 		rsp.App.Id = id
-		return
+		return nil
 	}
 
-	return
+	return errors.New("[CreateApp] req.app  is nil")
 }
 
 func (e entry) ListApps(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) error {
