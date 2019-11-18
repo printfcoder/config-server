@@ -3,10 +3,11 @@ package model
 import "time"
 
 type Item struct {
-	Id          uint64    `json:"id"`
-	NamespaceId uint64    `json:"namespaceId"`
-	Key         string    `json:"key"`
-	Value       string    `json:"value"`
-	CreatedTime time.Time `json:"createdTime"`
-	UpdatedTime time.Time `json:"updatedTime"`
+	ID          int       `gorm:"column:id;primary_key" json:"id;primary_key"`
+	Key         string    `gorm:"column:key" json:"key"`
+	Value       string    `gorm:"column:value" json:"value"`
+	NamespaceID int       `gorm:"column:namespace_id" json:"namespaceId"`
+	CreatedTime time.Time `gorm:"column:created_time" json:"createdTime"`
+	UpdatedTime time.Time `gorm:"column:updated_time" json:"updatedTime"`
+	Deleted     int       `gorm:"column:deleted" json:"deleted"`
 }
