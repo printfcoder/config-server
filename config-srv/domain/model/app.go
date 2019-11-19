@@ -3,7 +3,7 @@ package model
 import "time"
 
 type App struct {
-	ID          int       `gorm:"column:id;primary_key" json:"id;primary_key"`
+	ID          int       `gorm:"column:id;primary_key" json:"id"`
 	AppID       string    `gorm:"column:app_id" json:"appId"`
 	AppName     string    `gorm:"column:app_name" json:"appName"`
 	CreatedTime time.Time `gorm:"column:created_time" json:"createdTime"`

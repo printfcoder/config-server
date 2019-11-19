@@ -3,7 +3,7 @@ package model
 import "time"
 
 type Cluster struct {
-	ID          int       `gorm:"column:id;primary_key" json:"id;primary_key"`
+	ID          int       `gorm:"column:id;primary_key" json:"id"`
 	Name        string    `gorm:"column:name" json:"name"`
 	AppID       string    `gorm:"column:app_id" json:"appId"`
 	CreatedTime time.Time `gorm:"column:created_time" json:"createdTime"`
