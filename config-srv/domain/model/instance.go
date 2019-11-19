@@ -8,7 +8,7 @@ type Instance struct {
 	UpdatedAt time.Time  `gorm:"column:updated_at" json:"updatedAt"`
 	DeletedAt *time.Time `sql:"index" gorm:"column:deleted_at" json:"deletedAt"`
 
-	IP          string `gorm:"column:ip" json:"ip"`
-	AppID       string `gorm:"column:app_id" json:"appId"`
-	ClusterName string `gorm:"column:cluster_name" json:"clusterName"`
+	IP          string `gorm:"column:ip;unique;not null" json:"ip"`
+	AppID       string `gorm:"column:app_id;unique;not null" json:"appId"`
+	ClusterName string `gorm:"column:cluster_name;unique;not null" json:"clusterName"`
 }

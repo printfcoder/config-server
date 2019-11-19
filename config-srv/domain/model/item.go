@@ -8,7 +8,7 @@ type Item struct {
 	UpdatedAt time.Time  `gorm:"column:updated_at" json:"updatedAt"`
 	DeletedAt *time.Time `sql:"index" gorm:"column:deleted_at" json:"deletedAt"`
 
-	Key         string `gorm:"column:key" json:"key"`
-	Value       string `gorm:"column:value" json:"value"`
-	NamespaceID int    `gorm:"column:namespace_id" json:"namespaceId"`
+	Key         string `gorm:"column:key;not null" json:"key"`
+	Value       string `gorm:"column:value;not null" json:"value"`
+	NamespaceID int    `gorm:"column:namespace_id;not null" json:"namespaceId"`
 }

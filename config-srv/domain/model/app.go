@@ -10,6 +10,6 @@ type App struct {
 	UpdatedAt time.Time  `gorm:"column:updated_at" json:"updatedAt"`
 	DeletedAt *time.Time `sql:"index" gorm:"column:deleted_at" json:"deletedAt"`
 
-	AppID   string `gorm:"column:app_id" json:"appId"`
-	AppName string `gorm:"column:app_name" json:"appName"`
+	AppID   string `gorm:"column:app_id;unique;not null" json:"appId"`
+	AppName string `gorm:"column:app_name;not null" json:"appName"`
 }

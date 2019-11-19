@@ -8,6 +8,6 @@ type Env struct {
 	UpdatedAt time.Time  `gorm:"column:updated_at" json:"updatedAt"`
 	DeletedAt *time.Time `sql:"index" gorm:"column:deleted_at" json:"deletedAt"`
 
-	Name  string `gorm:"column:name" json:"name"`
-	AppID string `gorm:"column:app_id" json:"appId"`
+	Name  string `gorm:"column:name;unique;not null" json:"name"`
+	AppID string `gorm:"column:app_id;unique;not null" json:"appId"`
 }
