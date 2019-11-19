@@ -1,9 +1,9 @@
 package repository
 
 import (
-	"database/sql"
-
+	"github.com/jinzhu/gorm"
 	"github.com/micro-in-cn/config-server/config-srv/config"
+	"github.com/micro-in-cn/config-server/config-srv/domain/model"
 	"github.com/micro/go-micro/util/log"
 )
 
@@ -11,17 +11,20 @@ func initMysql() {
 	log.Infof("[initMysql] init db: mysql")
 
 	var err error
-
-	mysqlDB, err = sql.Open("mysql", config.GetDBConfig().GetMysql().GetURL())
-	if err != nil {
+	if mysqlDB, err = gorm.Open("mysql", config.GetDBConfig().GetMysql().GetURL()); err != nil {
 		log.Fatal(err)
-		panic(err)
+	}
+	mysqlDB.SingularTable(true)
+	mysqlDB.DB().SetMaxOpenConns(100)
+	mysqlDB.DB().SetMaxIdleConns(10)
+	mysqlDB.LogMode(true)
+
+	if err = mysqlDB.AutoMigrate(&model.App{}, &model.Cluster{}, &model.Env{}, &model.Instance{}, &model.Item{}, &model.Namespace{}).Error; err != nil {
+		_ = mysqlDB.Close()
+		log.Fatal(err)
 	}
 
-	mysqlDB.SetMaxOpenConns(config.GetDBConfig().GetMysql().GetMaxOpenConnection())
-	mysqlDB.SetMaxIdleConns(config.GetDBConfig().GetMysql().GetMaxIdleConnection())
-
-	if err = mysqlDB.Ping(); err != nil {
+	if err = mysqlDB.DB().Ping(); err != nil {
 		log.Fatal(err)
 	}
 
