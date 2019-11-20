@@ -4,7 +4,6 @@ micro:
       dialect: mysql
       orm: gorm
       gorm:
-        singularTable: true
         logMode: true
         autoMigrate: true
       mysql:

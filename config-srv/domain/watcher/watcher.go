@@ -4,30 +4,47 @@ import (
 	"crypto/md5"
 	"fmt"
 	"sync"
+	"time"
 
 	"github.com/micro/go-micro/config/source"
 )
 
 var (
-	w     = &watcher{}
 	mu    sync.Mutex
 	chMap = make(map[string][]chan *source.ChangeSet)
-	nsMap = make(map[string][]chan *source.ChangeSet) //nolint
 )
-
-func Init() {
-
-}
 
 type Watcher interface {
 	Watch(app, env, cluster string, namespaces string) (ch chan *source.ChangeSet)
 }
 
 type watcher struct {
+	updateChan chan *NSUpdate
 }
 
-func (w *watcher) Run() {
+func (w *watcher) run() {
+	select {
+	case cs := <-w.updateChan:
+		{
+			csKey := getChKey(cs.AppId, cs.Env, cs.Cluster, cs.Namespace)
+			if chs, ok := chMap[csKey]; ok {
+				f := func(ch chan *source.ChangeSet) {
+					set := &source.ChangeSet{
+						Data:      cs.NewestBytes,
+						Format:    "json",
+						Source:    "mucp", // or mysql or some names else
+						Timestamp: time.Now(),
+					}
+					set.Checksum = set.Sum()
+					ch <- set
+				}
 
+				for _, ch := range chs {
+					go f(ch)
+				}
+			}
+		}
+	}
 }
 
 func (w *watcher) Watch(app, env, cluster string, namespace string) (ch chan *source.ChangeSet) {
@@ -42,7 +59,11 @@ func (w *watcher) Watch(app, env, cluster string, namespace string) (ch chan *so
 	return
 }
 
-func GetWatcher() Watcher {
+func NewWatcher(opts Options) Watcher {
+	w := &watcher{
+		updateChan: opts.UpdateChan,
+	}
+	go w.run()
 	return w
 }
 
