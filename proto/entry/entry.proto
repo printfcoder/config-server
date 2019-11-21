@@ -1,34 +1,20 @@
 syntax = "proto3";
 
 service Entry {
-    rpc CreateApp (EntryRequest) returns (EntryResponse) {
-    };
-    rpc ListApps (EntryRequest) returns (EntryResponse) {
-    };
-    rpc GetApp (EntryRequest) returns (EntryResponse) {
-    };
-    rpc CreateCluster (EntryRequest) returns (EntryResponse) {
-    };
-    rpc GetCluster (EntryRequest) returns (EntryResponse) {
-    };
-    rpc ListClusters (EntryRequest) returns (EntryResponse) {
-    };
-    rpc CreateEnv (EntryRequest) returns (EntryResponse) {
-    };
-    rpc GetEnv (EntryRequest) returns (EntryResponse) {
-    };
-    rpc ListEnvs (EntryRequest) returns (EntryResponse) {
-    };
-    rpc PullInstances (EntryRequest) returns (EntryResponse) {
-    };
-    rpc CreateNamespace (EntryRequest) returns (EntryResponse) {
-    };
-    rpc CreateItem (EntryRequest) returns (EntryResponse) {
-    };
-    rpc UpdateItem (EntryRequest) returns (EntryResponse) {
-    };
-    rpc DeleteItems (EntryRequest) returns (EntryResponse) {
-    };
+    rpc CreateApp (EntryRequest) returns (EntryResponse) {}
+    rpc ListApps (EntryRequest) returns (EntryResponse) {}
+    rpc GetApp (EntryRequest) returns (EntryResponse) {}
+    rpc CreateCluster (EntryRequest) returns (EntryResponse) {}
+    rpc GetCluster (EntryRequest) returns (EntryResponse) {}
+    rpc ListClusters (EntryRequest) returns (EntryResponse) {}
+    rpc CreateEnv (EntryRequest) returns (EntryResponse) {}
+    rpc GetEnv (EntryRequest) returns (EntryResponse) {}
+    rpc ListEnvs (EntryRequest) returns (EntryResponse) {}
+    rpc PullInstances (EntryRequest) returns (EntryResponse) {}
+    rpc CreateNamespace (EntryRequest) returns (EntryResponse) {}
+    rpc CreateItem (EntryRequest) returns (EntryResponse) {}
+    rpc UpdateItem (EntryRequest) returns (EntryResponse) {}
+    rpc DeleteItems (EntryRequest) returns (EntryResponse) {}
 }
 
 message App {
