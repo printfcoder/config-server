@@ -34,16 +34,11 @@ func (w *watcher) run() {
 		ch <- set
 	}
 
-	for {
-		select {
-		case cs := <-w.updateChan:
-			{
-				csKey := getChKey(cs.AppId, cs.Env, cs.Cluster, cs.Namespace)
-				if chs, ok := chMap[csKey]; ok {
-					for _, ch := range chs {
-						go f(ch, cs)
-					}
-				}
+	for cs := range w.updateChan {
+		csKey := getChKey(cs.AppId, cs.Env, cs.Cluster, cs.Namespace)
+		if chs, ok := chMap[csKey]; ok {
+			for _, ch := range chs {
+				go f(ch, cs)
 			}
 		}
 	}
