@@ -72,7 +72,8 @@ func NewSource(opts ...source.Option) source.Source {
 		namespace: ns,
 		opts:      options,
 		client:    service.GetService(),
-		wc:        cwc.GetWatcher(),
+		// TODO
+		//wc:        cwc.GetWatcher(),
 	}
 
 	return s

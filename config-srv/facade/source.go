@@ -12,6 +12,8 @@ import (
 
 type source struct{}
 
+var _ proto.SourceHandler = source{}
+
 func (s source) Read(ctx context.Context, req *proto.ReadRequest, rsp *proto.ReadResponse) (err error) {
 	appName := loader.ParsePath(req.Path)
 	switch appName {

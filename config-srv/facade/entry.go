@@ -8,11 +8,11 @@ import (
 	proto "github.com/micro-in-cn/config-server/proto/entry"
 )
 
-type entry struct {
-}
+type entry struct{}
 
 var (
-	appService = &service.App{}
+	_          proto.EntryHandler = entry{}
+	appService                    = &service.App{}
 )
 
 func (e entry) CreateApp(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) error {
