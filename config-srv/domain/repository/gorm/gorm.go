@@ -1,14 +1,11 @@
 package gorm
 
 import (
-	"sync"
-
 	"github.com/jinzhu/gorm"
 	"github.com/micro/go-micro/util/log"
 )
 
 var (
-	once  sync.Once
 	db    *gorm.DB
 	gRepo *repo
 )
