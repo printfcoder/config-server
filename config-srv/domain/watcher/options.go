@@ -1,5 +1,7 @@
 package watcher
 
+import "github.com/micro-in-cn/config-server/config-srv/domain/dto"
+
 type Options struct {
 	UpdateChan chan *NSUpdate
 }
@@ -7,10 +9,7 @@ type Options struct {
 type Option func(o *Options)
 
 type NSUpdate struct {
-	AppId       string
-	Cluster     string
-	Namespace   string
-	Env         string
+	dto.NSUpdate
 	NewestBytes []byte
 }
 
