@@ -30,12 +30,11 @@ Config-Server参考了Apollo在业界成熟的设计方案，详见下方的服�
 ![](https://github.com/micro-in-cn/docs/blob/master/architecture-design/config-server/business-desgin.png)
 
 - App 应用
-  - Env 环境（开发、测试、压测、集成、产线）
-    - Cluster 集群 （A区，B区，C区）
-      - Namespace 空间 （配置所属域）
-        - Item 配置项
-          - Key 配置名
-          - Value 配置值
+  - Cluster 集群 （A区，B区，C区）
+    - Namespace 空间 （配置所属域）
+      - Item 配置项
+        - Key 配置名
+        - Value 配置值
 
 ## 接口设计
 
@@ -44,7 +43,7 @@ Config-Server参考了Apollo在业界成熟的设计方案，详见下方的服�
 1. 结构：
  
 ```text
-VERSION1:#{APP}/#{ENV}/#{CLUSTER}/#{Namespace1},#{Namespace2},#{Namespace3}
+VERSION1:#{APP}/#{CLUSTER}/#{Namespace1},#{Namespace2},#{Namespace3}
 ```
 
 2. 释意：
@@ -52,9 +51,8 @@ VERSION1:#{APP}/#{ENV}/#{CLUSTER}/#{Namespace1},#{Namespace2},#{Namespace3}
 ```text
 - VERSION1 版本号，固定，目前仅支持“VERSION1”，在接口统一的情况下，用于解析不同版本的请求文本
   - APP 应用名，一次请求只能填一个
-    - Env 应用部署环境，一次请求只能填一个
-      - Cluster 应用部署的集群，一次请求只能填一个，Config-Server支持向同一服务不同集群提供服务
-        - Namespace 配置所属域（空间），可以传任意多个，返回这些空间下的所有配置
+    - Cluster 应用部署的集群，一次请求只能填一个，Config-Server支持向同一服务不同集群提供服务
+      - Namespace 配置所属域（空间），可以传任意多个，返回这些空间下的所有配置
 ```
 
 3. 存储
