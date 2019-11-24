@@ -20,8 +20,8 @@ type Broker interface {
 
 type bk struct {
 	opts Options
-	mu   sync.Mutex
-	b    broker.Broker
+	// mu   sync.Mutex
+	b broker.Broker
 }
 
 func (b *bk) Run() {

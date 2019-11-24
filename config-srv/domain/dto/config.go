@@ -10,5 +10,4 @@ type NSUpdate struct {
 	AppId     string
 	Cluster   string
 	Namespace string
-	Env       string
 }

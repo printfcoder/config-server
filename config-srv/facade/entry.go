@@ -11,14 +11,13 @@ import (
 type entry struct{}
 
 var (
-	_          proto.EntryHandler = entry{}
-	appService                    = &service.App{}
+	_ proto.EntryHandler = entry{}
 )
 
 func (e entry) CreateApp(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) error {
 	app := req.GetApp()
 	if app != nil {
-		id, err := appService.CreateApp(app.GetAppId(), app.GetAppName())
+		id, err := service.GetService().CreateApp(app.GetAppId(), app.GetAppName())
 		if err != nil {
 			return err
 		}
