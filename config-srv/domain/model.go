@@ -22,7 +22,6 @@ func (d *domain) run() {
 		repository.Init()
 		service.Init(repository.Repo(), update)
 		watcher.NewWatcher(watcher.WithUpdateChan(update))
-
 	})
 }
 

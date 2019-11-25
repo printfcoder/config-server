@@ -58,7 +58,7 @@ func (w *watcher) Watch(app, cluster string, namespace string) (ch chan *source.
 }
 
 func GetWatcher() Watcher {
-
+	return w
 }
 
 func NewWatcher(opts ...Option) {
