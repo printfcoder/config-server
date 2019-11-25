@@ -19,6 +19,7 @@ type domain struct {
 
 func (d *domain) run() {
 	d.once.Do(func() {
+		// todo make the Init method in an unified style.
 		repository.Init()
 		service.Init(repository.Repo(), update)
 		watcher.NewWatcher(watcher.WithUpdateChan(update))
