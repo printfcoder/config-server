@@ -1,8 +1,6 @@
 package mysql
 
 import (
-	"github.com/micro-in-cn/config-server/config-srv/domain/service"
-	cwc "github.com/micro-in-cn/config-server/config-srv/domain/watcher"
 	"github.com/micro/go-micro/config/source"
 )
 
@@ -11,15 +9,14 @@ var (
 )
 
 type mysqlSource struct {
-	app, env, cluster string
-	namespace         string
-	opts              source.Options
-	client            service.Service
-	wc                cwc.Watcher
+	app, cluster string
+	namespace    string
+	opts         source.Options
+	client       QueryService
 }
 
 func (m *mysqlSource) Read() (*source.ChangeSet, error) {
-	return m.client.QueryChangeSet(m.app, m.env, m.cluster, m.namespace)
+	return m.client.QueryChangeSet(m.app, m.cluster, m.namespace)
 }
 
 func (m *mysqlSource) Watch() (source.Watcher, error) {
@@ -29,7 +26,7 @@ func (m *mysqlSource) Watch() (source.Watcher, error) {
 		return nil, err
 	}
 
-	return newWatcher(m.wc, cs, m.app, m.env, m.cluster, m.namespace)
+	return newWatcher(m.client, cs, m.app, m.cluster, m.namespace)
 }
 
 func (m *mysqlSource) String() string {
@@ -43,7 +40,8 @@ func NewSource(opts ...source.Option) source.Source {
 	}
 
 	cluster := DefaultCluster
-	app, env, ns := "", "", ""
+	app, ns := "", ""
+	var queryService QueryService
 	ok := false
 
 	if options.Context != nil {
@@ -52,14 +50,19 @@ func NewSource(opts ...source.Option) source.Source {
 			panic("App name is necessary for loading configurations! plz check on the Platform-Web which name it is.")
 		}
 
-		env, ok = options.Context.Value(envName{}).(string)
+		ns, ok = options.Context.Value(namespace{}).(string)
 		if !ok {
-			panic("Env is necessary for loading configurations! eg. It probably should be DEV or FAT or UAT...")
+			panic("Namespace is necessary for loading configurations! it decides which domain configs you need.")
 		}
 
 		ns, ok = options.Context.Value(namespace{}).(string)
 		if !ok {
 			panic("Namespace is necessary for loading configurations! it decides which domain configs you need.")
+		}
+
+		queryService, ok = options.Context.Value(serviceRef{}).(QueryService)
+		if !ok {
+			panic("QueryService is necessary for loading configurations! it decides where to query the config data.")
 		}
 	} else {
 		panic("Mysql source config error!")
@@ -67,13 +70,10 @@ func NewSource(opts ...source.Option) source.Source {
 
 	s := &mysqlSource{
 		app:       app,
-		env:       env,
 		cluster:   cluster,
 		namespace: ns,
 		opts:      options,
-		client:    service.GetService(),
-		// TODO
-		//wc:        cwc.GetWatcher(),
+		client:    queryService,
 	}
 
 	return s

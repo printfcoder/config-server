@@ -2,13 +2,19 @@ package mysql
 
 import (
 	"context"
+
 	"github.com/micro/go-micro/config/source"
 )
 
 type appName struct{}
-type envName struct{}
 type clusterName struct{}
 type namespace struct{}
+type serviceRef struct{}
+
+type QueryService interface {
+	QueryChangeSet(app, env, cluster string, namespaces ...string) (set *source.ChangeSet, err error)
+	Watch(app, cluster string, namespaces string) (ch chan *source.ChangeSet)
+}
 
 func WithApp(app string) source.Option {
 	return func(o *source.Options) {
@@ -16,15 +22,6 @@ func WithApp(app string) source.Option {
 			o.Context = context.Background()
 		}
 		o.Context = context.WithValue(o.Context, appName{}, app)
-	}
-}
-
-func WithEnv(env string) source.Option {
-	return func(o *source.Options) {
-		if o.Context == nil {
-			o.Context = context.Background()
-		}
-		o.Context = context.WithValue(o.Context, envName{}, env)
 	}
 }
 
@@ -43,5 +40,14 @@ func WithNamespace(ns ...string) source.Option {
 			o.Context = context.Background()
 		}
 		o.Context = context.WithValue(o.Context, namespace{}, ns)
+	}
+}
+
+func WithQueryService(service QueryService) source.Option {
+	return func(o *source.Options) {
+		if o.Context == nil {
+			o.Context = context.Background()
+		}
+		o.Context = context.WithValue(o.Context, serviceRef{}, service)
 	}
 }

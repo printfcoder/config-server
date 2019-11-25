@@ -15,7 +15,7 @@ var (
 )
 
 type Watcher interface {
-	Watch(app, env, cluster string, namespaces string) (ch chan *source.ChangeSet)
+	Watch(app, cluster string, namespace string) (ch chan *source.ChangeSet)
 }
 
 type watcher struct {
@@ -35,7 +35,7 @@ func (w *watcher) run() {
 	}
 
 	for cs := range w.updateChan {
-		csKey := getChKey(cs.AppId, cs.Env, cs.Cluster, cs.Namespace)
+		csKey := getChKey(cs.AppId, cs.Cluster, cs.Namespace)
 		if chs, ok := chMap[csKey]; ok {
 			for _, ch := range chs {
 				go f(ch, cs)
@@ -44,9 +44,9 @@ func (w *watcher) run() {
 	}
 }
 
-func (w *watcher) Watch(app, env, cluster string, namespace string) (ch chan *source.ChangeSet) {
+func (w *watcher) Watch(app, cluster string, namespace string) (ch chan *source.ChangeSet) {
 	// for locating which chan should be pushed event into
-	key := getChKey(app, env, cluster, namespace)
+	key := getChKey(app, cluster, namespace)
 
 	mu.Lock()
 	ch = make(chan *source.ChangeSet)
@@ -56,14 +56,19 @@ func (w *watcher) Watch(app, env, cluster string, namespace string) (ch chan *so
 	return
 }
 
-func NewWatcher(opts Options) Watcher {
+func NewWatcher(opts ...Option) Watcher {
+	options := &Options{}
+	for _, opt := range opts {
+		opt(options)
+	}
+
 	w := &watcher{
-		updateChan: opts.UpdateChan,
+		updateChan: options.UpdateChan,
 	}
 	go w.run()
 	return w
 }
 
-func getChKey(app, env, cluster, namespace string) string {
-	return string(md5.New().Sum([]byte(fmt.Sprintf("%s%s%s%s", app, env, cluster, namespace))))
+func getChKey(app, cluster, namespace string) string {
+	return string(md5.New().Sum([]byte(fmt.Sprintf("%s%s%s", app, cluster, namespace))))
 }
