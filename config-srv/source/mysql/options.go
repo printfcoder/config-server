@@ -12,7 +12,7 @@ type namespace struct{}
 type serviceRef struct{}
 
 type QueryService interface {
-	QueryChangeSet(app, env, cluster string, namespaces ...string) (set *source.ChangeSet, err error)
+	QueryChangeSet(app, env, cluster, namespace string) (set *source.ChangeSet, err error)
 	Watch(app, cluster string, namespaces string) (ch chan *source.ChangeSet)
 }
 

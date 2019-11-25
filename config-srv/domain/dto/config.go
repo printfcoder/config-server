@@ -6,8 +6,12 @@ type NamespaceItems struct {
 	model.Item
 }
 
-type NSUpdate struct {
+type NS struct {
 	AppId     string
 	Cluster   string
 	Namespace string
+}
+
+type NSUpdate struct {
+	NS
 }

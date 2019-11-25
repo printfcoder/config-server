@@ -11,6 +11,7 @@ import (
 
 var (
 	mu    sync.Mutex
+	w     *watcher
 	chMap = make(map[string][]chan *source.ChangeSet)
 )
 
@@ -56,17 +57,21 @@ func (w *watcher) Watch(app, cluster string, namespace string) (ch chan *source.
 	return
 }
 
-func NewWatcher(opts ...Option) Watcher {
+func GetWatcher() Watcher {
+
+}
+
+func NewWatcher(opts ...Option) {
 	options := &Options{}
 	for _, opt := range opts {
 		opt(options)
 	}
 
-	w := &watcher{
+	w = &watcher{
 		updateChan: options.UpdateChan,
 	}
 	go w.run()
-	return w
+	return
 }
 
 func getChKey(app, cluster, namespace string) string {

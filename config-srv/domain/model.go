@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"github.com/micro-in-cn/config-server/config-srv/source/mysql"
 	"sync"
 
 	"github.com/micro-in-cn/config-server/config-srv/domain/repository"
@@ -22,9 +21,8 @@ func (d *domain) run() {
 	d.once.Do(func() {
 		repository.Init()
 		service.Init(repository.Repo(), update)
-		watcher.NewWatcher()
+		watcher.NewWatcher(watcher.WithUpdateChan(update))
 
-		mysqlSource := mysql.NewSource(mysql)
 	})
 }
 

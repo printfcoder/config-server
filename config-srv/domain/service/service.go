@@ -15,7 +15,7 @@ var (
 )
 
 type Service interface {
-	QueryChangeSet(app, cluster string, namespaces ...string) (set *source.ChangeSet, err error)
+	QueryChangeSet(app, cluster, namespace string) (set *source.ChangeSet, err error)
 	CreateApp(appId, appName string) (int64, error)
 	ListApps(appIds ...string) ([]*entry.App, error)
 }
@@ -39,6 +39,6 @@ func Init(repository repository.AppRepository, update chan *watcher.NSUpdate) {
 	})
 }
 
-func (s *service) QueryChangeSet(app, cluster string, namespaces ...string) (set *source.ChangeSet, err error) {
+func (s *service) QueryChangeSet(app, cluster, namespace string) (set *source.ChangeSet, err error) {
 	return nil, nil
 }
