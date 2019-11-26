@@ -12,7 +12,7 @@ import (
 var (
 	once   sync.Once
 	repo   Repository
-	models = []interface{}{&model.App{}, &model.Cluster{}, &model.Env{}, &model.Instance{}, &model.Item{}, &model.Namespace{}}
+	models = []interface{}{&model.App{}, &model.Cluster{}, &model.Instance{}, &model.Item{}, &model.Namespace{}}
 )
 
 // Init 初始化数据库

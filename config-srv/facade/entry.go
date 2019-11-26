@@ -17,11 +17,11 @@ var (
 func (e entry) CreateApp(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) error {
 	app := req.GetApp()
 	if app != nil {
-		id, err := service.GetService().CreateApp(app.GetAppId(), app.GetAppName())
+		newApp, err := service.GetService().CreateApp(app.GetName())
 		if err != nil {
 			return err
 		}
-		rsp.App.Id = id
+		rsp.App.Id = newApp.Id
 		return nil
 	}
 

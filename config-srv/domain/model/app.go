@@ -5,11 +5,10 @@ import (
 )
 
 type App struct {
-	ID        uint       `gorm:"column:id;primary_key" json:"id"`
-	CreatedAt time.Time  `gorm:"column:created_at" json:"createdAt"`
-	UpdatedAt time.Time  `gorm:"column:updated_at" json:"updatedAt"`
-	DeletedAt *time.Time `sql:"index" gorm:"column:deleted_at" json:"deletedAt"`
+	ID        uint       `gorm:"column:id;          primary_key" json:"id"`
+	CreatedAt time.Time  `gorm:"column:created_at"               json:"createdAt"`
+	UpdatedAt time.Time  `gorm:"column:updated_at"               json:"updatedAt"`
+	DeletedAt *time.Time `sql:"index" gorm:"column:deleted_at"   json:"deletedAt"`
 
-	AppID   string `gorm:"column:app_id;unique;not null" json:"appId"`
-	AppName string `gorm:"column:app_name;not null" json:"appName"`
+	Name string `gorm:"column:name; not null; unique_index:app_uindex" json:"name"`
 }

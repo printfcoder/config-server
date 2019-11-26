@@ -3,13 +3,13 @@ package repository
 import "github.com/micro-in-cn/config-server/config-srv/domain/model"
 
 type Repository interface {
-	GlobeRepository
+	GlobalRepository
 }
 
-type GlobeRepository interface {
-	CreateApp(appId, appName string) (int64, error)
-	CreateCluster(appId, clusterName string) error
-	CreateNamespace(appId, clusterName, namespace string) error
-	UpdateItems(appId, clusterName, namespace string, del []*model.Item, update []*model.Item, insert []*model.Item) error
-	ListApps(appIds ...string) ([]*model.App, error)
+type GlobalRepository interface {
+	CreateApp(appName string) (*model.App, error)
+	CreateCluster(appName, clusterName string) (*model.Cluster, error)
+	CreateNamespace(appName, clusterName, namespaceName string) (*model.Namespace, error)
+	UpdateItems(appName, clusterName, namespace string, del []*model.Item, update []*model.Item, insert []*model.Item) error
+	ListApps(appNames ...string) ([]*model.App, error)
 }
