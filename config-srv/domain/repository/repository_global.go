@@ -10,6 +10,7 @@ type GlobalRepository interface {
 	CreateApp(appName string) (*model.App, error)
 	CreateCluster(appName, clusterName string) (*model.Cluster, error)
 	CreateNamespace(appName, clusterName, namespaceName string) (*model.Namespace, error)
+	ListItems(appName, clusterName, namespaceName string) ([]*model.Item, error)
 	UpdateItems(appName, clusterName, namespace string, del []*model.Item, update []*model.Item, insert []*model.Item) error
 	ListApps(appNames ...string) ([]*model.App, error)
 }

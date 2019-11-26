@@ -1,6 +1,6 @@
 # 配置管理系统
 
-Config-Server 是Go-Micro体系下的配置中心，与Go-Micro仅支持其它K-V与文件存储的配置方式不同，Config-Server提供集中化管理的平台，提供针对不同环境、集群、版本化、回滚等丰富的特性。
+Config-Server 是Go-Micro体系下的配置中心，与Go-Micro仅支持其它K-V与文件存储的配置方式不同，Config-Server提供集中化管理的平台，提供针对不同集群、版本化、回滚等丰富的特性。
 
 Config-Server 基于go-micro/config编写，可以无缝集成到任何Go-Micro服务中。
 
@@ -12,7 +12,7 @@ Config-Server 基于go-micro/config编写，可以无缝集成到任何Go-Micro�
 
 ## 借鉴Apollo
 
-Config-Server参考了Apollo在业界成熟的设计方案，详见下方的服务架构与业务架构。感谢Apollo这款优秀的产品，我们在她的设计之上简化了表设计、部署流程，更重要的是面向Go-Micro风格的服务。
+Config-Server参考了Apollo在业界成熟的设计方案，详见下方的服务架构与业务架构。感谢Apollo这款优秀的产品，我们在她的设计之上简化了表设计、部署流程，更重要的是面向Go-Micro风格的服务。打包即运行，活动像Apollo那样的部署烦恼。
 
 ## 架构设计
 
@@ -43,7 +43,7 @@ Config-Server参考了Apollo在业界成熟的设计方案，详见下方的服�
 1. 结构：
  
 ```text
-VERSION1:#{APP}/#{CLUSTER}/#{Namespace1},#{Namespace2},#{Namespace3}
+VERSION1:#{APP}/#{CLUSTER}/#{Namespace1}
 ```
 
 2. 释意：
@@ -52,8 +52,10 @@ VERSION1:#{APP}/#{CLUSTER}/#{Namespace1},#{Namespace2},#{Namespace3}
 - VERSION1 版本号，固定，目前仅支持“VERSION1”，在接口统一的情况下，用于解析不同版本的请求文本
   - APP 应用名，一次请求只能填一个
     - Cluster 应用部署的集群，一次请求只能填一个，Config-Server支持向同一服务不同集群提供服务
-      - Namespace 配置所属域（空间），可以传任意多个，返回这些空间下的所有配置
+      - Namespace 配置所属域（空间），目前只能传一个，返回这些空间下的所有配置。
 ```
+
+> Namespace 只支持传一个的原因是如果是多个，而改动往往只会有一个，此时不得不把所有未改动的Namespace一起返回，数据量会非常庞大。
 
 3. 存储
 

@@ -37,11 +37,7 @@ func jsonMarshal(v interface{}) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func mapToJsonArray(sources map[string]string) {
-
-}
-
-func dotStringToJSON(key, value string, obj interface{}) string {
+func DotStringToJSON(key, value string, obj interface{}) string {
 	parts := strings.Split(key, ".")
 	if len(parts) == 1 {
 		return fmt.Sprintf("{\"%s\":\"%s\"}", key, value)
@@ -66,4 +62,9 @@ func dotStringToJSON(key, value string, obj interface{}) string {
 
 	bs, _ := json.Marshal(obj)
 	return string(bs)
+}
+
+func MergeJSONs(inputs []string) string {
+	_ = len(inputs)
+	return ""
 }

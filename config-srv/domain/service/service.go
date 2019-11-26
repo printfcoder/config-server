@@ -1,11 +1,15 @@
 package service
 
 import (
+	"fmt"
+	"github.com/micro/go-micro/util/log"
 	"sync"
+	"time"
 
 	"github.com/micro-in-cn/config-server/config-srv/domain/model"
 	"github.com/micro-in-cn/config-server/config-srv/domain/repository"
 	"github.com/micro-in-cn/config-server/config-srv/domain/watcher"
+	cjson "github.com/micro-in-cn/config-server/config-srv/util/json"
 	"github.com/micro-in-cn/config-server/proto/entry"
 	"github.com/micro/go-micro/config/source"
 )
@@ -45,7 +49,34 @@ func Init(repository repository.GlobalRepository, update chan *watcher.NSUpdate)
 	})
 }
 
-func (s *service) QueryChangeSet(app, cluster, namespace string) (set *source.ChangeSet, err error) {
+func (s *service) QueryChangeSet(appName, cluster, namespace string) (set *source.ChangeSet, err error) {
+	items, err := s.repo.ListItems(appName, cluster, namespace)
+	if err != nil {
+		err = fmt.Errorf("[QueryChangeSet] select items error: %s. ", err.Error())
+		log.Error(err)
+		return
+	}
+
+	// convert to json
+	jsonLists := make([]string, len(items))
+	for _, item := range items {
+		jsonMap := map[string]interface{}{}
+		jsonLists = append(jsonLists, cjson.DotStringToJSON(item.Key, item.Value, jsonMap))
+	}
+
+	// todo combine jsonLists into a json string
+	jsonStr := cjson.MergeJSONs(jsonLists)
+
+	set = &source.ChangeSet{
+		Data:      []byte(jsonStr),
+		Format:    "json",
+		Source:    "mucp",
+		Timestamp: time.Now(),
+	}
+
+	// todo supports sign?
+	set.Checksum = set.Sum()
+
 	return
 }
 
@@ -55,8 +86,13 @@ func (s *service) UpdateNSItems(app, cluster, namespace string, items []*entry.I
 	}
 
 	del, update, insert := groupItemsForUpdate(items)
-	// todo log
-	return s.repo.UpdateItems(app, cluster, namespace, del, update, insert)
+	err = s.repo.UpdateItems(app, cluster, namespace, del, update, insert)
+	if err != nil {
+		log.Error("[UpdateNSItems] update items error: %s", err.Error())
+		return
+	}
+
+	return
 }
 
 func groupItemsForUpdate(items []*entry.Item) (del []*model.Item, update []*model.Item, insert []*model.Item) {
@@ -64,11 +100,11 @@ func groupItemsForUpdate(items []*entry.Item) (del []*model.Item, update []*mode
 		// mode one
 		m := convertEntryItemToModel(item)
 		switch item.UpdateType {
-		case entry.Item_DELETE:
+		case entry.UpdateType_DELETE:
 			del = append(del, m)
-		case entry.Item_UPDATE:
+		case entry.UpdateType_UPDATE:
 			update = append(update, m)
-		case entry.Item_INSERT:
+		case entry.UpdateType_INSERT:
 			insert = append(insert, m)
 		}
 	}
@@ -77,5 +113,8 @@ func groupItemsForUpdate(items []*entry.Item) (del []*model.Item, update []*mode
 }
 
 func convertEntryItemToModel(item *entry.Item) (ret *model.Item) {
-	return &model.Item{}
+	return &model.Item{
+		Key:   item.Key,
+		Value: item.Value,
+	}
 }

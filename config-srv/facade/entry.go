@@ -2,10 +2,11 @@ package facade
 
 import (
 	"context"
-	"errors"
+	"fmt"
 
 	"github.com/micro-in-cn/config-server/config-srv/domain/service"
 	proto "github.com/micro-in-cn/config-server/proto/entry"
+	"github.com/prometheus/common/log"
 )
 
 type entry struct{}
@@ -14,68 +15,60 @@ var (
 	_ proto.EntryHandler = entry{}
 )
 
-func (e entry) CreateApp(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) error {
+func (e entry) CreateApp(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) (err error) {
 	app := req.GetApp()
 	if app != nil {
 		newApp, err := service.GetService().CreateApp(app.GetName())
 		if err != nil {
-			return err
+			err = fmt.Errorf("[CreateApp] create app error: %s", err.Error())
+			goto Error
 		}
 		rsp.App.Id = newApp.Id
 		return nil
+	} else {
+		err = fmt.Errorf("[CreateApp] req.app is nil")
+		goto Error
 	}
 
-	return errors.New("[CreateApp] req.app  is nil")
+Error:
+	{
+		log.Warn(err)
+		rsp.Error = &proto.Error{
+			// todo，define united error code
+			Msg: err.Error(),
+		}
+		return nil
+	}
 }
 
-func (e entry) ListApps(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) error {
+func (e entry) ListApps(context.Context, *proto.EntryRequest, *proto.EntryResponse) error {
 	panic("implement me")
 }
 
-func (e entry) GetApp(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) error {
+func (e entry) GetApp(context.Context, *proto.EntryRequest, *proto.EntryResponse) error {
 	panic("implement me")
 }
 
-func (e entry) CreateCluster(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) error {
+func (e entry) CreateCluster(context.Context, *proto.EntryRequest, *proto.EntryResponse) error {
 	panic("implement me")
 }
 
-func (e entry) GetCluster(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) error {
+func (e entry) GetCluster(context.Context, *proto.EntryRequest, *proto.EntryResponse) error {
 	panic("implement me")
 }
 
-func (e entry) ListClusters(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) error {
+func (e entry) ListClusters(context.Context, *proto.EntryRequest, *proto.EntryResponse) error {
 	panic("implement me")
 }
 
-func (e entry) CreateEnv(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) error {
+func (e entry) PullInstances(context.Context, *proto.EntryRequest, *proto.EntryResponse) error {
 	panic("implement me")
 }
 
-func (e entry) GetEnv(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) error {
+func (e entry) CreateNamespace(context.Context, *proto.EntryRequest, *proto.EntryResponse) error {
 	panic("implement me")
 }
 
-func (e entry) ListEnvs(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) error {
-	panic("implement me")
-}
-
-func (e entry) PullInstances(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) error {
-	panic("implement me")
-}
-
-func (e entry) CreateNamespace(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) error {
-	panic("implement me")
-}
-
-func (e entry) CreateItem(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) error {
-	panic("implement me")
-}
-
-func (e entry) UpdateItem(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) error {
-	panic("implement me")
-}
-
-func (e entry) DeleteItems(ctx context.Context, req *proto.EntryRequest, rsp *proto.EntryResponse) error {
+func (e entry) UpdateItems(context.Context, *proto.EntryRequest, *proto.EntryResponse) error {
 	panic("implement me")
 }

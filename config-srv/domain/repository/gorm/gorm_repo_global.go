@@ -2,9 +2,11 @@ package gorm
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/jinzhu/gorm"
 	"github.com/micro-in-cn/config-server/config-srv/domain/model"
+	"github.com/micro/go-micro/util/log"
 )
 
 type globalRepo struct{}
@@ -39,27 +41,44 @@ func (g *globalRepo) CreateNamespace(appName, clusterName, namespaceName string)
 	return namespace, err
 }
 
+func (g *globalRepo) ListItems(appName, clusterName, namespaceName string) (items []*model.Item, err error) {
+	err = db.Select("item").Where("app_name = ? and cluster_name = ? and namespace_name = ?",
+		appName, clusterName, namespaceName).Find(&items).Error
+	if err != nil {
+		err = fmt.Errorf("[ListItems] select items error: %s. appName:%s, clusterName:%s, namespaceName:%s", err.Error(),
+			appName, clusterName, namespaceName)
+		log.Error(err)
+		return
+	}
+
+	return
+}
+
 func (g *globalRepo) UpdateItems(appName, clusterName, namespaceName string, del []*model.Item, update []*model.Item, insert []*model.Item) error {
 	var err error
 	tx := db.Begin()
+	defer func() {
+		if err != nil {
+			log.Error("[UpdateItems] update items error: %s", err.Error())
+			tx.Rollback()
+		}
+	}()
 
 	if len(del) != 0 {
-		if err = deleteItems(tx, del); err != nil {
-			tx.Rollback()
+		if err = deleteItems(tx, appName, clusterName, namespaceName, del); err != nil {
 			return err
 		}
 	}
 
 	if len(update) != 0 {
-		if err = updateItems(tx, update); err != nil {
-			tx.Rollback()
+		if err = updateItems(tx, appName, clusterName, namespaceName, update);
+			err != nil {
 			return err
 		}
 	}
 
 	if len(insert) != 0 {
 		if err = insertItems(tx, appName, clusterName, namespaceName, insert); err != nil {
-			tx.Rollback()
 			return err
 		}
 	}
@@ -81,28 +100,29 @@ func (g *globalRepo) ListApps(appNames ...string) (apps []*model.App, err error)
 	return
 }
 
-func deleteItems(tx *gorm.DB, del []*model.Item) error {
+func deleteItems(tx *gorm.DB, appName, clusterName, namespaceName string, del []*model.Item) error {
 	for _, v := range del {
 		if v.ID == 0 {
 			return ErrIllegalID
 		}
 
-		if err := tx.Table("item").Delete(v).Error; err != nil {
+		if err := tx.Table("item").Where("app_name = ? and cluster_name = ? and namespace_name = ? and key = ?",
+			appName, clusterName, namespaceName, v.Key).Delete(v).Error; err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func updateItems(tx *gorm.DB, update []*model.Item) error {
+func updateItems(tx *gorm.DB, appName, clusterName, namespaceName string, update []*model.Item) error {
 	for _, v := range update {
 		if v.ID == 0 {
 			return ErrIllegalID
 		}
 
-		err := tx.Table("item").Where("id = ?", v.ID).Updates(
+		err := tx.Table("item").Where("app_name = ? and cluster_name = ? and namespace_name = ? and key = ?",
+			appName, clusterName, namespaceName, v.Key).Updates(
 			map[string]string{
-				"key":   v.Key,
 				"value": v.Value,
 			}).Error
 		if err != nil {

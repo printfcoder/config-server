@@ -40,14 +40,9 @@ type EntryService interface {
 	CreateCluster(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
 	GetCluster(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
 	ListClusters(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
-	CreateEnv(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
-	GetEnv(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
-	ListEnvs(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
 	PullInstances(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
 	CreateNamespace(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
-	CreateItem(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
-	UpdateItem(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
-	DeleteItems(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
+	UpdateItems(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
 }
 
 type entryService struct {
@@ -128,36 +123,6 @@ func (c *entryService) ListClusters(ctx context.Context, in *EntryRequest, opts 
 	return out, nil
 }
 
-func (c *entryService) CreateEnv(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error) {
-	req := c.c.NewRequest(c.name, "Entry.CreateEnv", in)
-	out := new(EntryResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *entryService) GetEnv(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error) {
-	req := c.c.NewRequest(c.name, "Entry.GetEnv", in)
-	out := new(EntryResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *entryService) ListEnvs(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error) {
-	req := c.c.NewRequest(c.name, "Entry.ListEnvs", in)
-	out := new(EntryResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *entryService) PullInstances(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error) {
 	req := c.c.NewRequest(c.name, "Entry.PullInstances", in)
 	out := new(EntryResponse)
@@ -178,28 +143,8 @@ func (c *entryService) CreateNamespace(ctx context.Context, in *EntryRequest, op
 	return out, nil
 }
 
-func (c *entryService) CreateItem(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error) {
-	req := c.c.NewRequest(c.name, "Entry.CreateItem", in)
-	out := new(EntryResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *entryService) UpdateItem(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error) {
-	req := c.c.NewRequest(c.name, "Entry.UpdateItem", in)
-	out := new(EntryResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *entryService) DeleteItems(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error) {
-	req := c.c.NewRequest(c.name, "Entry.DeleteItems", in)
+func (c *entryService) UpdateItems(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error) {
+	req := c.c.NewRequest(c.name, "Entry.UpdateItems", in)
 	out := new(EntryResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -217,14 +162,9 @@ type EntryHandler interface {
 	CreateCluster(context.Context, *EntryRequest, *EntryResponse) error
 	GetCluster(context.Context, *EntryRequest, *EntryResponse) error
 	ListClusters(context.Context, *EntryRequest, *EntryResponse) error
-	CreateEnv(context.Context, *EntryRequest, *EntryResponse) error
-	GetEnv(context.Context, *EntryRequest, *EntryResponse) error
-	ListEnvs(context.Context, *EntryRequest, *EntryResponse) error
 	PullInstances(context.Context, *EntryRequest, *EntryResponse) error
 	CreateNamespace(context.Context, *EntryRequest, *EntryResponse) error
-	CreateItem(context.Context, *EntryRequest, *EntryResponse) error
-	UpdateItem(context.Context, *EntryRequest, *EntryResponse) error
-	DeleteItems(context.Context, *EntryRequest, *EntryResponse) error
+	UpdateItems(context.Context, *EntryRequest, *EntryResponse) error
 }
 
 func RegisterEntryHandler(s server.Server, hdlr EntryHandler, opts ...server.HandlerOption) error {
@@ -235,14 +175,9 @@ func RegisterEntryHandler(s server.Server, hdlr EntryHandler, opts ...server.Han
 		CreateCluster(ctx context.Context, in *EntryRequest, out *EntryResponse) error
 		GetCluster(ctx context.Context, in *EntryRequest, out *EntryResponse) error
 		ListClusters(ctx context.Context, in *EntryRequest, out *EntryResponse) error
-		CreateEnv(ctx context.Context, in *EntryRequest, out *EntryResponse) error
-		GetEnv(ctx context.Context, in *EntryRequest, out *EntryResponse) error
-		ListEnvs(ctx context.Context, in *EntryRequest, out *EntryResponse) error
 		PullInstances(ctx context.Context, in *EntryRequest, out *EntryResponse) error
 		CreateNamespace(ctx context.Context, in *EntryRequest, out *EntryResponse) error
-		CreateItem(ctx context.Context, in *EntryRequest, out *EntryResponse) error
-		UpdateItem(ctx context.Context, in *EntryRequest, out *EntryResponse) error
-		DeleteItems(ctx context.Context, in *EntryRequest, out *EntryResponse) error
+		UpdateItems(ctx context.Context, in *EntryRequest, out *EntryResponse) error
 	}
 	type Entry struct {
 		entry
@@ -279,18 +214,6 @@ func (h *entryHandler) ListClusters(ctx context.Context, in *EntryRequest, out *
 	return h.EntryHandler.ListClusters(ctx, in, out)
 }
 
-func (h *entryHandler) CreateEnv(ctx context.Context, in *EntryRequest, out *EntryResponse) error {
-	return h.EntryHandler.CreateEnv(ctx, in, out)
-}
-
-func (h *entryHandler) GetEnv(ctx context.Context, in *EntryRequest, out *EntryResponse) error {
-	return h.EntryHandler.GetEnv(ctx, in, out)
-}
-
-func (h *entryHandler) ListEnvs(ctx context.Context, in *EntryRequest, out *EntryResponse) error {
-	return h.EntryHandler.ListEnvs(ctx, in, out)
-}
-
 func (h *entryHandler) PullInstances(ctx context.Context, in *EntryRequest, out *EntryResponse) error {
 	return h.EntryHandler.PullInstances(ctx, in, out)
 }
@@ -299,14 +222,6 @@ func (h *entryHandler) CreateNamespace(ctx context.Context, in *EntryRequest, ou
 	return h.EntryHandler.CreateNamespace(ctx, in, out)
 }
 
-func (h *entryHandler) CreateItem(ctx context.Context, in *EntryRequest, out *EntryResponse) error {
-	return h.EntryHandler.CreateItem(ctx, in, out)
-}
-
-func (h *entryHandler) UpdateItem(ctx context.Context, in *EntryRequest, out *EntryResponse) error {
-	return h.EntryHandler.UpdateItem(ctx, in, out)
-}
-
-func (h *entryHandler) DeleteItems(ctx context.Context, in *EntryRequest, out *EntryResponse) error {
-	return h.EntryHandler.DeleteItems(ctx, in, out)
+func (h *entryHandler) UpdateItems(ctx context.Context, in *EntryRequest, out *EntryResponse) error {
+	return h.EntryHandler.UpdateItems(ctx, in, out)
 }
