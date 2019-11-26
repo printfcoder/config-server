@@ -15,11 +15,13 @@ var (
 	once sync.Once
 )
 
+var _ Service = &service{}
+
 type Service interface {
 	QueryChangeSet(app, cluster, namespace string) (set *source.ChangeSet, err error)
 	UpdateNSItems(app, cluster, namespace string, items []*entry.Item) (err error)
-	CreateApp(appId, appName string) (int64, error)
-	ListApps(appIds ...string) ([]*entry.App, error)
+	CreateApp(appName string) (int64, error)
+	ListApps(appNames ...string) ([]*entry.App, error)
 }
 
 type service struct {

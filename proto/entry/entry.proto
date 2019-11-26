@@ -7,9 +7,6 @@ service Entry {
     rpc CreateCluster (EntryRequest) returns (EntryResponse) {}
     rpc GetCluster (EntryRequest) returns (EntryResponse) {}
     rpc ListClusters (EntryRequest) returns (EntryResponse) {}
-    rpc CreateEnv (EntryRequest) returns (EntryResponse) {}
-    rpc GetEnv (EntryRequest) returns (EntryResponse) {}
-    rpc ListEnvs (EntryRequest) returns (EntryResponse) {}
     rpc PullInstances (EntryRequest) returns (EntryResponse) {}
     rpc CreateNamespace (EntryRequest) returns (EntryResponse) {}
     rpc CreateItem (EntryRequest) returns (EntryResponse) {}
@@ -19,31 +16,22 @@ service Entry {
 
 message App {
     int64 id = 1;
-    string appId = 2;
-    string appName = 3;
-    int64 createdTime = 4;
-    int64 updatedTime = 5;
+    string appName = 2;
+    int64 createdTime = 3;
+    int64 updatedTime = 4;
 }
 
 message Cluster {
     int64 id = 1;
     string name = 2;
-    string appId = 3;
-    int64 createdTime = 4;
-    int64 updatedTime = 5;
-}
-
-message Env {
-    int64 id = 1;
-    string name = 2;
-    string appId = 3;
+    string appName = 3;
     int64 createdTime = 4;
     int64 updatedTime = 5;
 }
 
 message Instance {
     int64 id = 1;
-    string appId = 2;
+    string appName = 2;
     string clusterName = 3;
     string ip = 4;
     int64 createdTime = 5;
@@ -63,7 +51,7 @@ message Item {
 
 message Namespace {
     int64 id = 1;
-    string appId = 2;
+    string appName = 2;
     string name = 3;
     string clusterName = 4;
     int64 createdTime = 5;
@@ -85,6 +73,4 @@ message EntryResponse {
     repeated App appList = 4;
     Cluster cluster = 5;
     repeated Cluster clusterList = 6;
-    Env env = 7;
-    repeated Env envList = 8;
 }
