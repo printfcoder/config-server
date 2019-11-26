@@ -20,7 +20,9 @@ var _ Service = &service{}
 type Service interface {
 	QueryChangeSet(app, cluster, namespace string) (set *source.ChangeSet, err error)
 	UpdateNSItems(app, cluster, namespace string, items []*entry.Item) (err error)
-	CreateApp(appName string) (int64, error)
+	CreateApp(appName string) (*entry.App, error)
+	CreateCluster(appName, clusterName string) (*entry.Cluster, error)
+	CreateNamespace(appName, clusterName, namespaceName string) (*entry.Namespace, error)
 	ListApps(appNames ...string) ([]*entry.App, error)
 }
 
