@@ -18,7 +18,7 @@ message ReadRequest {
 }
 
 message ReadResponse {
-	ChangeSet change_set = 1;	
+	ChangeSet changeSet = 1;
 }
 
 message WatchRequest {
@@ -26,6 +26,6 @@ message WatchRequest {
 }
 
 message WatchResponse {
-	ChangeSet change_set = 1;
+	ChangeSet changeSet = 1;
 }
 
