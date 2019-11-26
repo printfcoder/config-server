@@ -40,6 +40,9 @@ type EntryService interface {
 	CreateCluster(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
 	GetCluster(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
 	ListClusters(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
+	CreateEnv(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
+	GetEnv(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
+	ListEnvs(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
 	PullInstances(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
 	CreateNamespace(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
 	CreateItem(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error)
@@ -125,6 +128,36 @@ func (c *entryService) ListClusters(ctx context.Context, in *EntryRequest, opts 
 	return out, nil
 }
 
+func (c *entryService) CreateEnv(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error) {
+	req := c.c.NewRequest(c.name, "Entry.CreateEnv", in)
+	out := new(EntryResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *entryService) GetEnv(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error) {
+	req := c.c.NewRequest(c.name, "Entry.GetEnv", in)
+	out := new(EntryResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *entryService) ListEnvs(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error) {
+	req := c.c.NewRequest(c.name, "Entry.ListEnvs", in)
+	out := new(EntryResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *entryService) PullInstances(ctx context.Context, in *EntryRequest, opts ...client.CallOption) (*EntryResponse, error) {
 	req := c.c.NewRequest(c.name, "Entry.PullInstances", in)
 	out := new(EntryResponse)
@@ -184,6 +217,9 @@ type EntryHandler interface {
 	CreateCluster(context.Context, *EntryRequest, *EntryResponse) error
 	GetCluster(context.Context, *EntryRequest, *EntryResponse) error
 	ListClusters(context.Context, *EntryRequest, *EntryResponse) error
+	CreateEnv(context.Context, *EntryRequest, *EntryResponse) error
+	GetEnv(context.Context, *EntryRequest, *EntryResponse) error
+	ListEnvs(context.Context, *EntryRequest, *EntryResponse) error
 	PullInstances(context.Context, *EntryRequest, *EntryResponse) error
 	CreateNamespace(context.Context, *EntryRequest, *EntryResponse) error
 	CreateItem(context.Context, *EntryRequest, *EntryResponse) error
@@ -199,6 +235,9 @@ func RegisterEntryHandler(s server.Server, hdlr EntryHandler, opts ...server.Han
 		CreateCluster(ctx context.Context, in *EntryRequest, out *EntryResponse) error
 		GetCluster(ctx context.Context, in *EntryRequest, out *EntryResponse) error
 		ListClusters(ctx context.Context, in *EntryRequest, out *EntryResponse) error
+		CreateEnv(ctx context.Context, in *EntryRequest, out *EntryResponse) error
+		GetEnv(ctx context.Context, in *EntryRequest, out *EntryResponse) error
+		ListEnvs(ctx context.Context, in *EntryRequest, out *EntryResponse) error
 		PullInstances(ctx context.Context, in *EntryRequest, out *EntryResponse) error
 		CreateNamespace(ctx context.Context, in *EntryRequest, out *EntryResponse) error
 		CreateItem(ctx context.Context, in *EntryRequest, out *EntryResponse) error
@@ -238,6 +277,18 @@ func (h *entryHandler) GetCluster(ctx context.Context, in *EntryRequest, out *En
 
 func (h *entryHandler) ListClusters(ctx context.Context, in *EntryRequest, out *EntryResponse) error {
 	return h.EntryHandler.ListClusters(ctx, in, out)
+}
+
+func (h *entryHandler) CreateEnv(ctx context.Context, in *EntryRequest, out *EntryResponse) error {
+	return h.EntryHandler.CreateEnv(ctx, in, out)
+}
+
+func (h *entryHandler) GetEnv(ctx context.Context, in *EntryRequest, out *EntryResponse) error {
+	return h.EntryHandler.GetEnv(ctx, in, out)
+}
+
+func (h *entryHandler) ListEnvs(ctx context.Context, in *EntryRequest, out *EntryResponse) error {
+	return h.EntryHandler.ListEnvs(ctx, in, out)
 }
 
 func (h *entryHandler) PullInstances(ctx context.Context, in *EntryRequest, out *EntryResponse) error {
