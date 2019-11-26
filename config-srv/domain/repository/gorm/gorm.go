@@ -5,28 +5,21 @@ import (
 	"github.com/micro/go-micro/util/log"
 )
 
-var (
-	db    *gorm.DB
-	gRepo *repo
-)
+var db *gorm.DB
 
 func NewGROMRepo(opts ...Option) *repo {
-	if gRepo != nil {
-		return gRepo
-	}
-
 	var options Options
 	for _, o := range opts {
 		o(&options)
 	}
+	// init connection
 	db = newGORM(options)
 
 	return &repo{}
 }
 
 func newGORM(options Options) *gorm.DB {
-	var err error
-	db, err = gorm.Open(options.Dialect, options.URL)
+	db, err := gorm.Open(options.Dialect, options.URL)
 	if err != nil {
 		log.Fatal(err)
 	}
