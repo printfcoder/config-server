@@ -48,7 +48,12 @@ message Item {
     string value = 4;
     string comment = 5;
     int32 lineNo = 6;
-    int32 updateType = 7;
+    enum UpdateType {
+        DELETE = 0;
+        UPDATE = 1;
+        INSERT = 2;
+    }
+    UpdateType updateType = 7;
     int64 createdTime = 8;
     int64 updatedTime = 9;
 }

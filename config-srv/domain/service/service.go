@@ -63,13 +63,12 @@ func groupItemsForUpdate(items []*entry.Item) (del []*model.Item, update []*mode
 	for _, item := range items {
 		// mode one
 		m := convertEntryItemToModel(item)
-		// TODO item.UpdateType
-		switch 1 {
-		case 1:
+		switch item.UpdateType {
+		case entry.Item_DELETE:
 			del = append(del, m)
-		case 2:
+		case entry.Item_UPDATE:
 			update = append(update, m)
-		case 3:
+		case entry.Item_INSERT:
 			insert = append(insert, m)
 		}
 	}
