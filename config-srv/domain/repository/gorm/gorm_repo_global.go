@@ -5,12 +5,9 @@ import (
 
 	"github.com/jinzhu/gorm"
 	"github.com/micro-in-cn/config-server/config-srv/domain/model"
-	"github.com/micro-in-cn/config-server/config-srv/domain/repository"
 )
 
 type globalRepo struct{}
-
-var _ repository.GlobalRepository = &globalRepo{}
 
 var ErrIllegalID = errors.New("illegal id")
 

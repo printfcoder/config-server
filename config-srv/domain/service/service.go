@@ -23,7 +23,7 @@ type Service interface {
 }
 
 type service struct {
-	repo     repository.GlobeRepository
+	repo     repository.GlobalRepository
 	updateNS chan *watcher.NSUpdate
 }
 
@@ -31,7 +31,7 @@ func GetService() Service {
 	return s
 }
 
-func Init(repository repository.GlobeRepository, update chan *watcher.NSUpdate) {
+func Init(repository repository.GlobalRepository, update chan *watcher.NSUpdate) {
 	// todo singleton if needs
 	once.Do(func() {
 		s = &service{
@@ -59,7 +59,8 @@ func groupItemsForUpdate(items []*entry.Item) (del []*model.Item, update []*mode
 	for _, item := range items {
 		// mode one
 		m := convertEntryItemToModel(item)
-		switch item.UpdateType {
+		// TODO item.UpdateType
+		switch 1 {
 		case 1:
 			del = append(del, m)
 		case 2:
@@ -73,7 +74,5 @@ func groupItemsForUpdate(items []*entry.Item) (del []*model.Item, update []*mode
 }
 
 func convertEntryItemToModel(item *entry.Item) (ret *model.Item) {
-	return &model.Item{
-
-	}
+	return &model.Item{}
 }
