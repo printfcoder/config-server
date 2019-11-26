@@ -12,7 +12,7 @@ func (s *service) CreateApp(appName string) (*entry.App, error) {
 
 	return &entry.App{
 		Id:          int64(app.ID),
-		AppName:     app.Name,
+		Name:        app.Name,
 		CreatedTime: app.CreatedAt.Unix(),
 		UpdatedTime: app.CreatedAt.Unix(),
 	}, nil
@@ -28,7 +28,7 @@ func (s *service) ListApps(appNames ...string) ([]*entry.App, error) {
 	for _, v := range apps {
 		entryApps = append(entryApps, &entry.App{
 			Id:          int64(v.ID),
-			AppName:     v.Name,
+			Name:        v.Name,
 			CreatedTime: v.CreatedAt.Unix(),
 			UpdatedTime: v.CreatedAt.Unix(),
 		})

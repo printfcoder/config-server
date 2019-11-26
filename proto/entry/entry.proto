@@ -16,7 +16,7 @@ service Entry {
 
 message App {
     int64 id = 1;
-    string appName = 2;
+    string name = 2;
     int64 createdTime = 3;
     int64 updatedTime = 4;
 }
