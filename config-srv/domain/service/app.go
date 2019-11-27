@@ -18,6 +18,10 @@ func (s *service) CreateApp(appName string) (*entry.App, error) {
 	}, nil
 }
 
+func (s *service) DeleteApp(appName string) error {
+	return s.repo.DeleteApp(appName)
+}
+
 func (s *service) ListApps(appNames ...string) ([]*entry.App, error) {
 	apps, err := s.repo.ListApps(appNames...)
 	if err != nil {
