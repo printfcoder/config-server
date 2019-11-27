@@ -24,7 +24,7 @@ func newGORM(options Options) *gorm.DB {
 		log.Fatal(err)
 	}
 
-	db.SingularTable(options.SingularTable)
+	db.SingularTable(true)
 	db.DB().SetMaxOpenConns(options.MaxOpenConns)
 	db.DB().SetMaxIdleConns(options.MaxIdleConns)
 	db.LogMode(options.LogMode)

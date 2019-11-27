@@ -2,7 +2,6 @@ package gorm
 
 type Options struct {
 	Dialect           string
-	SingularTable     bool
 	URL               string
 	MaxOpenConns      int
 	MaxIdleConns      int
@@ -16,12 +15,6 @@ type Option func(o *Options)
 func WithDialect(dialect string) Option {
 	return func(o *Options) {
 		o.Dialect = dialect
-	}
-}
-
-func WithSingularTable(singularTable bool) Option {
-	return func(o *Options) {
-		o.SingularTable = singularTable
 	}
 }
 

@@ -27,7 +27,6 @@ func Init() {
 				rgorm.WithDialect(config.GetDBConfig().GetDialect()),
 				rgorm.WithAutoMigrate(config.GetDBConfig().GetGORM().GetAutoMigrate()),
 				rgorm.WithLogMode(config.GetDBConfig().GetGORM().GetLogMode()),
-				rgorm.WithSingularTable(true),
 				// todo or pg?
 				rgorm.WithURL(config.GetDBConfig().GetMysql().GetURL()),
 				rgorm.WithMaxIdleConns(config.GetDBConfig().GetMysql().GetMaxIdleConnection()),
