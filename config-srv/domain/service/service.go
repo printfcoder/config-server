@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/micro-in-cn/config-server/config-srv/domain/dto"
 	"sync"
 
 	"github.com/micro-in-cn/config-server/config-srv/domain/repository"
@@ -34,20 +35,22 @@ type Service interface {
 }
 
 type service struct {
-	repo     repository.GlobalRepository
-	updateNS chan *watcher.NSUpdate
+	repo               repository.GlobalRepository
+	updateNSForWatcher chan<- *watcher.NSUpdate
+	updateNSForPub     chan<- *dto.NSUpdate
 }
 
 func GetService() Service {
 	return s
 }
 
-func Init(repository repository.GlobalRepository, update chan *watcher.NSUpdate) {
+func Init(repository repository.GlobalRepository, updateNS chan<- *watcher.NSUpdate, updateNSForPub chan<- *dto.NSUpdate) {
 	// todo singleton if needs
 	once.Do(func() {
 		s = &service{
-			repo:     repository,
-			updateNS: update,
+			repo:               repository,
+			updateNSForWatcher: updateNS,
+			updateNSForPub:     updateNSForPub,
 		}
 	})
 }

@@ -2,6 +2,9 @@ package service
 
 import (
 	"fmt"
+	"github.com/micro-in-cn/config-server/config-srv/domain/dto"
+	"github.com/micro-in-cn/config-server/config-srv/domain/watcher"
+	"sync"
 	"time"
 
 	"github.com/micro-in-cn/config-server/config-srv/domain/model"
@@ -50,9 +53,46 @@ func (s *service) UpdateNSItems(app, cluster, namespace string, items []*entry.I
 	del, update, insert := groupItemsForUpdate(items)
 	err = s.repo.UpdateItems(app, cluster, namespace, del, update, insert)
 	if err != nil {
-		log.Error("[UpdateNSItems] update items error: %s", err.Error())
+		err = fmt.Errorf("[UpdateNSItems] update items error: %s", err.Error())
+		log.Error(err)
 		return
 	}
+
+	dtoNSUpdate := &dto.NSUpdate{
+		NS: dto.NS{
+			AppId:     app,
+			Cluster:   cluster,
+			Namespace: namespace,
+		},
+	}
+	var wg sync.WaitGroup
+	wg.Add(2)
+
+	// pub event to sibling nodes
+	go func() {
+		// some biz logic here
+		s.updateNSForPub <- dtoNSUpdate
+		wg.Done()
+	}()
+
+	// tell Watcher sendMsg back to the clients
+	go func() {
+		set, err := s.QueryChangeSet(app, cluster, namespace)
+		if err != nil {
+			err = fmt.Errorf("[UpdateNSItems] query the newest set error: %s", err.Error())
+			log.Error(err)
+			return
+		}
+
+		s.updateNSForWatcher <- &watcher.NSUpdate{
+			NSUpdate:        dtoNSUpdate,
+			NewestDataBytes: set.Data,
+		}
+		wg.Done()
+	}()
+
+	// todo timeout
+	wg.Wait()
 
 	return
 }

@@ -35,8 +35,8 @@ func (b *bk) Run() {
 func (b *bk) sub() error {
 	_, err := b.b.Subscribe(b.opts.UpdateTopic, func(p broker.Event) error {
 		log.Debug("[sub] Received Body: %s, Header: %v\n", string(p.Message().Body), p.Message().Header)
-		update := dto.NSUpdate{}
-		err := json.Unmarshal(p.Message().Body, &update)
+		update := &dto.NSUpdate{}
+		err := json.Unmarshal(p.Message().Body, update)
 		if err != nil {
 			log.Error("[sub] broker sub err: %s", err.Error())
 			return err

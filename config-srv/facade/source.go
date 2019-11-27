@@ -92,7 +92,9 @@ func (s *source) Watch(ctx context.Context, req *proto.WatchRequest, server prot
 				}
 			}
 		case <-exit:
-			// do not close socket! just let GC recycle the current goroutine
+			// do not close this socket! just let GC recycle the current goroutine
+			// the client will reuse it for the next request, if we close it now, the client will never get any message
+			// until recreating a new stream connection.
 			return
 		}
 	}

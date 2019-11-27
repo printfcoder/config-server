@@ -7,13 +7,13 @@ import (
 
 type Options struct {
 	Broker      broker.Broker
-	UpdateEvt   chan dto.NSUpdate
+	UpdateEvt   chan *dto.NSUpdate
 	UpdateTopic string
 }
 
 type Option func(o *Options)
 
-func WithUpdateEvt(b chan dto.NSUpdate) Option {
+func WithUpdateEvt(b chan *dto.NSUpdate) Option {
 	return func(o *Options) {
 		o.UpdateEvt = b
 	}

@@ -20,13 +20,13 @@ type Watcher interface {
 }
 
 type watcher struct {
-	updateChan chan *NSUpdate
+	updateChan <-chan *NSUpdate
 }
 
 func (w *watcher) run() {
 	f := func(ch chan *source.ChangeSet, cs *NSUpdate) {
 		set := &source.ChangeSet{
-			Data:      cs.NewestBytes,
+			Data:      cs.NewestDataBytes,
 			Format:    "json",
 			Source:    "mucp", // or mysql or some names else
 			Timestamp: time.Now(),
