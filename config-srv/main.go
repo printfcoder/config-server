@@ -27,5 +27,5 @@ func main() {
 func configSrvStart(server server.Server, bk broker.Broker) {
 	_ = facade.RegisterHandlers(server)
 	config.Init()
-	domain.Init()
+	domain.Init(bk)
 }

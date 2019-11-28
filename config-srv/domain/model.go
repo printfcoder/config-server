@@ -1,10 +1,10 @@
 package domain
 
 import (
-	"github.com/micro-in-cn/config-server/config-srv/domain/broker"
-	"github.com/micro-in-cn/config-server/config-srv/domain/dto"
 	"sync"
 
+	"github.com/micro-in-cn/config-server/config-srv/domain/broker"
+	"github.com/micro-in-cn/config-server/config-srv/domain/dto"
 	"github.com/micro-in-cn/config-server/config-srv/domain/repository"
 	"github.com/micro-in-cn/config-server/config-srv/domain/service"
 	"github.com/micro-in-cn/config-server/config-srv/domain/watcher"

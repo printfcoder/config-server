@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/micro-in-cn/config-server/config-srv/domain/dto"
 	"sync"
 
+	"github.com/micro-in-cn/config-server/config-srv/domain/dto"
 	"github.com/micro-in-cn/config-server/config-srv/domain/repository"
 	"github.com/micro-in-cn/config-server/config-srv/domain/watcher"
 	"github.com/micro-in-cn/config-server/proto/entry"
